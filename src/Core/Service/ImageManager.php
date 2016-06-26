@@ -49,6 +49,8 @@ class ImageManager
             throw  new \Exception('Restricted domains enabled, the domain your fetching from is not allowed: ' . parse_url($sourceFile, PHP_URL_HOST));
 
         }
+        /*echo '<pre>
+        '.print_r($options,true);*/
 
         $options = $this->parseOptions($options);
         $newFileName = md5(implode('.', $options) . $sourceFile);
@@ -56,10 +58,12 @@ class ImageManager
         if ($this->filesystem->has($newFileName) && $options['refresh']) {
             $this->filesystem->delete($newFileName);
         }
-
         if (!$this->filesystem->has($newFileName)) {
             $this->saveNewFile($sourceFile, $newFileName, $options);
         }
+        /*echo '<br>
+        then:<br>
+        '.print_r($options,true);*/
 
         return $this->filesystem->read($newFileName);
     }
@@ -130,11 +134,19 @@ class ImageManager
         $strip = $this->extractByKey($options, 'strip');
         $mozJPEG = $this->extractByKey($options, 'mozjpeg');
         $thread = $this->extractByKey($options, 'thread');
-        $size = $this->extractByKey($options, 'width') . 'x' . $this->extractByKey($options, 'height');
+        $size = $this->extractByKey($options, 'width') . 'x' . $this->extractByKey($options, 'height') . '>';
 
         $command = [];
-        $command[] = "/usr/bin/convert " . $tmpFile . "'[" . escapeshellarg($size) . "]'";
-        $command[] = "-extent " . escapeshellarg($size);
+        //-filter Triangle 
+        //-define filter:support=2 
+        //-thumbnail OUTPUT_WIDTH -unsharp 0.25x0.25+8+0.065 -dither None -posterize 136 -quality 82 -define jpeg:fancy-upsampling=off -define png:compression-filter=5 -define png:compression-level=9 -define png:compression-strategy=1 -define png:exclude-chunk=all -interlace none -colorspace sRGB -strip 
+        //$command[] = "/usr/bin/convert " . $tmpFile . "[" . escapeshellarg($size) . "]";
+        //$command[] = "/usr/bin/convert " . $tmpFile . " -thumbnail " . escapeshellarg($size) . " ";
+        //$command[] = "/usr/bin/convert " . $tmpFile . " -filter Triangle -define filter:support=2 -thumbnail " . escapeshellarg($size) . " ";
+        //$command[] = "/usr/bin/convert " . $tmpFile . " -define filter:support=2 -thumbnail " . escapeshellarg($size) . " -unsharp 0.25x0.25+8+0.065 -dither None ";
+        //$command[] = "/usr/bin/convert " . $tmpFile . " -filter Triangle -define filter:support=2 -thumbnail " . escapeshellarg($size) . " -unsharp 0.25x0.25+8+0.065 -dither None  -colorspace sRGB";
+        $command[] = "/usr/bin/convert " . $tmpFile . " -filter Triangle -thumbnail " . escapeshellarg($size) . " -colorspace sRGB";
+        //$command[] = "-extent " . escapeshellarg($size);
 
         if (!empty($thread)) {
             $command[] = "-limit thread " . escapeshellarg($thread);
@@ -157,6 +169,7 @@ class ImageManager
         }
 
         $commandStr = implode(' ', $command);
+        header('command: '.$commandStr);
         return $commandStr;
     }
 
