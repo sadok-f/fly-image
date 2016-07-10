@@ -34,6 +34,10 @@ options_keys:
   sc: scale
   sf: sampling-factor
   rf: refresh
+  ett: extent
+  par: preserve-aspect-ratio
+  pns: preserve-natural-size
+
 
 #Default options values
 default_options:
@@ -53,3 +57,6 @@ default_options:
   scale: null
   sampling-factor: 1x1
   refresh: false
+  extent: null
+  preserve-aspect-ratio: true
+  preserve-natural-size: true

@@ -126,15 +126,27 @@ class ImageManager
      * @param $tmpFile
      * @param $newFilePath
      * @return string
+     *
+     * TODO: move the geometry logic to it's own function
      */
     public function generateCmdString($newFilePath, $tmpFile, $options)
     {
-        $this->extractByKey($options, 'refresh');
+        $refresh = $this->extractByKey($options, 'refresh');
         $quality = $this->extractByKey($options, 'quality');
         $strip = $this->extractByKey($options, 'strip');
         $mozJPEG = $this->extractByKey($options, 'mozjpeg');
         $thread = $this->extractByKey($options, 'thread');
-        $size = $this->extractByKey($options, 'width') . 'x' . $this->extractByKey($options, 'height') . '>';
+        $targetWidth = $this->extractByKey($options, 'width');
+        $targetHeight = $this->extractByKey($options, 'height');
+
+        // resizing constraints (< > !) can only be applied to geometry with both width AND height
+        $resizingConstraints = '';
+        if($targetWidth && $targetHeight) {
+            $resizingConstraints = $this->extractByKey($options, 'preserve-aspect-ratio') ? '>' : '!';
+            // for now we can't implement preserve-natural-size:false because ir requires unnecesary getting dimentions of the source file
+            $this->extractByKey($options, 'preserve-natural-size');
+        }
+        $size = (string) $targetWidth . 'x' . (string) $targetHeight . $resizingConstraints;
 
         $command = [];
         //-filter Triangle 
@@ -145,9 +157,11 @@ class ImageManager
         //$command[] = "/usr/bin/convert " . $tmpFile . " -filter Triangle -define filter:support=2 -thumbnail " . escapeshellarg($size) . " ";
         //$command[] = "/usr/bin/convert " . $tmpFile . " -define filter:support=2 -thumbnail " . escapeshellarg($size) . " -unsharp 0.25x0.25+8+0.065 -dither None ";
         //$command[] = "/usr/bin/convert " . $tmpFile . " -filter Triangle -define filter:support=2 -thumbnail " . escapeshellarg($size) . " -unsharp 0.25x0.25+8+0.065 -dither None  -colorspace sRGB";
-        $command[] = "/usr/bin/convert " . $tmpFile . " -filter Triangle -thumbnail " . escapeshellarg($size) . " -colorspace sRGB";
-        //$command[] = "-extent " . escapeshellarg($size);
+        $command[] = "/usr/bin/convert " . $tmpFile . " -thumbnail " . escapeshellarg($size) . " -colorspace sRGB";
+        // extent is for adding padding instead of croping, we shouldn't add it by default
+        //$command[] = "-extent " . escapeshellarg($targetWidth . 'x' . $targetHeight).' -background blue -gravity center';
 
+        // why expose this to the public API ?
         if (!empty($thread)) {
             $command[] = "-limit thread " . escapeshellarg($thread);
         }
@@ -169,7 +183,11 @@ class ImageManager
         }
 
         $commandStr = implode(' ', $command);
-        header('command: '.$commandStr);
+
+        // if there's a request to refresh, we will assume it's for debugging purposes and we will send back a header with the parsed im command that we are executing.
+        if($refresh) {
+            header('im-command: '.$commandStr);
+        }
         return $commandStr;
     }
 
