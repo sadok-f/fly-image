@@ -49,6 +49,8 @@ class ImageManager
             throw  new \Exception('Restricted domains enabled, the domain your fetching from is not allowed: ' . parse_url($sourceFile, PHP_URL_HOST));
 
         }
+        /*echo '<pre>
+        '.print_r($options,true);*/
 
         $options = $this->parseOptions($options);
         $newFileName = md5(implode('.', $options) . $sourceFile);
@@ -56,10 +58,12 @@ class ImageManager
         if ($this->filesystem->has($newFileName) && $options['refresh']) {
             $this->filesystem->delete($newFileName);
         }
-
         if (!$this->filesystem->has($newFileName)) {
             $this->saveNewFile($sourceFile, $newFileName, $options);
         }
+        /*echo '<br>
+        then:<br>
+        '.print_r($options,true);*/
 
         return $this->filesystem->read($newFileName);
     }
@@ -122,20 +126,42 @@ class ImageManager
      * @param $tmpFile
      * @param $newFilePath
      * @return string
+     *
+     * TODO: move the geometry logic to it's own function
      */
     public function generateCmdString($newFilePath, $tmpFile, $options)
     {
-        $this->extractByKey($options, 'refresh');
+        $refresh = $this->extractByKey($options, 'refresh');
         $quality = $this->extractByKey($options, 'quality');
         $strip = $this->extractByKey($options, 'strip');
         $mozJPEG = $this->extractByKey($options, 'mozjpeg');
         $thread = $this->extractByKey($options, 'thread');
-        $size = $this->extractByKey($options, 'width') . 'x' . $this->extractByKey($options, 'height');
+        $targetWidth = $this->extractByKey($options, 'width');
+        $targetHeight = $this->extractByKey($options, 'height');
+
+        // resizing constraints (< > !) can only be applied to geometry with both width AND height
+        $resizingConstraints = '';
+        if($targetWidth && $targetHeight) {
+            $resizingConstraints = $this->extractByKey($options, 'preserve-aspect-ratio') ? '>' : '!';
+            // for now we can't implement preserve-natural-size:false because ir requires unnecesary getting dimentions of the source file
+            $this->extractByKey($options, 'preserve-natural-size');
+        }
+        $size = (string) $targetWidth . 'x' . (string) $targetHeight . $resizingConstraints;
 
         $command = [];
-        $command[] = "/usr/bin/convert " . $tmpFile . "'[" . escapeshellarg($size) . "]'";
-        $command[] = "-extent " . escapeshellarg($size);
+        //-filter Triangle 
+        //-define filter:support=2 
+        //-thumbnail OUTPUT_WIDTH -unsharp 0.25x0.25+8+0.065 -dither None -posterize 136 -quality 82 -define jpeg:fancy-upsampling=off -define png:compression-filter=5 -define png:compression-level=9 -define png:compression-strategy=1 -define png:exclude-chunk=all -interlace none -colorspace sRGB -strip 
+        //$command[] = "/usr/bin/convert " . $tmpFile . "[" . escapeshellarg($size) . "]";
+        //$command[] = "/usr/bin/convert " . $tmpFile . " -thumbnail " . escapeshellarg($size) . " ";
+        //$command[] = "/usr/bin/convert " . $tmpFile . " -filter Triangle -define filter:support=2 -thumbnail " . escapeshellarg($size) . " ";
+        //$command[] = "/usr/bin/convert " . $tmpFile . " -define filter:support=2 -thumbnail " . escapeshellarg($size) . " -unsharp 0.25x0.25+8+0.065 -dither None ";
+        //$command[] = "/usr/bin/convert " . $tmpFile . " -filter Triangle -define filter:support=2 -thumbnail " . escapeshellarg($size) . " -unsharp 0.25x0.25+8+0.065 -dither None  -colorspace sRGB";
+        $command[] = "/usr/bin/convert " . $tmpFile . " -thumbnail " . escapeshellarg($size) . " -colorspace sRGB";
+        // extent is for adding padding instead of croping, we shouldn't add it by default
+        //$command[] = "-extent " . escapeshellarg($targetWidth . 'x' . $targetHeight).' -background blue -gravity center';
 
+        // why expose this to the public API ?
         if (!empty($thread)) {
             $command[] = "-limit thread " . escapeshellarg($thread);
         }
@@ -157,6 +183,11 @@ class ImageManager
         }
 
         $commandStr = implode(' ', $command);
+
+        // if there's a request to refresh, we will assume it's for debugging purposes and we will send back a header with the parsed im command that we are executing.
+        if($refresh) {
+            header('im-command: '.$commandStr);
+        }
         return $commandStr;
     }
 

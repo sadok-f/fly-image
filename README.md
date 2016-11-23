@@ -109,6 +109,98 @@ default_options:
   sampling-factor: 1x1
   refresh: false
 ```
+Most of these options are Imagemagick flags, many can get pretty advanced, use the [Imagemagick docs](http://www.imagemagick.org/script/command-line-options.php).
+
+### mozjpeg `bool`
+**default: 1** - Use moz-jpeg compression library, if `false` it fallsback to the default Imagemagick compression algorithm. 
+
+
+### quality `int` (0-100)
+**default: 90** - Sets the compression level for the output image.
+
+### unsharp `radiusxsigma{+gain}{+threshold}` 
+**default: null** - Sharpens an image with a convolved Gausian operator. A good example `0.25x0.25+8+0.065`.
+```sh
+   [...] -unsharp 0.25x0.25+8+0.065 ...
+```
+
+### width `int` 
+**default: null** - blah_bla_blah
+```sh
+   hhhh -width smthing ...
+```
+
+### height `int` 
+**default: null** - blah_bla_blah
+```sh
+   hhhh -height smthing ...
+```
+
+### crop `int` 
+**default: null** - blah_bla_blah
+```sh
+   hhhh -crop smthing ...
+```
+
+### background `int` 
+**default: null** - blah_bla_blah
+```sh
+   hhhh -background smthing ...
+```
+
+### strip `int` 
+**default: 1** - blah_bla_blah
+```sh
+   hhhh -strip smthing ...
+```
+
+### resize `int` 
+**default: null** - blah_bla_blah
+```sh
+   hhhh -resize smthing ...
+```
+
+### gravity `int` 
+**default: Center** - blah_bla_blah
+```sh
+   hhhh -gravity smthing ...
+```
+
+### thread `int` 
+**default: 1** - blah_bla_blah
+```sh
+   hhhh -thread smthing ...
+```
+
+### thumbnail `int` 
+**default: null** - blah_bla_blah
+```sh
+   hhhh -thumbnail smthing ...
+```
+
+### filter `int` 
+**default: Lanczos** - Resizing algorithm, Triangle is a smoother lighter option
+```sh
+   [...] -filter Triangle
+```
+
+### scale `int` 
+**default: null** - blah_bla_blah
+```sh
+   hhhh -scale smthing ...
+```
+
+### sampling `int` 
+**default-factor: 1x1** - blah_bla_blah
+```sh
+   hhhh -sampling smthing ...
+```
+
+### refresh `int` 
+**default: false** - blah_bla_blah
+```sh
+   hhhh -refresh smthing ...
+```
 
 
 
