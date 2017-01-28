@@ -2,42 +2,18 @@
 namespace Core\Tests;
 
 use Core\Entity\Image;
-use Silex\Application;
+use Core\Exception\ReadFileException;
 
-class ImageTest extends \PHPUnit_Framework_TestCase
+/**
+ * @backupGlobals disabled
+ */
+class ImageTest extends BaseTest
 {
-    /**
-     * @var Application
-     */
-    protected $app = null;
-
-    /**
-     *
-     */
-    public function setUp()
-    {
-        $this->app = $this->createApplication();
-    }
-
-    /**
-     * @return Application
-     */
-    public function createApplication()
-    {
-        $app = require __DIR__ . '/../../../app.php';
-        $app['debug'] = true;
-        unset($app['exception_handler']);
-        return $app;
-    }
-
     /**
      * Test parseOptions Method
      */
     public function testParseOptions()
     {
-        $options = 'w_200,h_100,c_1,bg_#999999,rz_1,sc_50,r_-45,unsh_0.25x0.25+8+0.065,rf_1,ett_100x80,fb_1';
-        $image = new Image($options, __DIR__ . '/../../../web/Rovinj-Croatia.jpg', $this->app['params']);
-
         $expectedParseArray = [
             'mozjpeg' => 1,
             'quality' => 90,
@@ -60,10 +36,47 @@ class ImageTest extends \PHPUnit_Framework_TestCase
             'extent' => '100x80',
             'preserve-aspect-ratio' => '1',
             'preserve-natural-size' => '1',
+            'webp-support' => '1',
+            'webp-lossless' => '0',
             'thread' => '1',
         ];
-        $parsedOptions = $image->parseOptions($options);
 
-        $this->assertEquals($parsedOptions, $expectedParseArray);
+        $this->assertEquals($this->image->getOptions(), $expectedParseArray);
+    }
+
+    /**
+     * Test SaveToTemporaryFile
+     */
+    public function testSaveToTemporaryFile()
+    {
+        $this->assertFileExists($this->image->getTemporaryFile());
+    }
+
+    /**
+     * Test SaveToTemporaryFileException
+     */
+    public function testSaveToTemporaryFileException()
+    {
+        $this->expectException(ReadFileException::class);
+        $this->image = new Image('', parent::IMG_TEST_PATH . '--fail', $this->app['params']);
+    }
+
+    /**
+     * Test GenerateFilesName
+     */
+    public function testGenerateFilesName()
+    {
+        $image_2 = new Image(parent::OPTION_URL, parent::IMG_TEST_PATH, $this->app['params']);
+        $this->assertEquals($this->image->getNewFileName(), $image_2->getNewFileName());
+        $this->assertNotEquals($this->image->getNewFilePath(), $image_2->getNewFilePath());
+    }
+
+    /**
+     * Test ExtractByKey
+     */
+    public function testExtractByKey()
+    {
+        $this->image->extractByKey('width');
+        $this->assertFalse(array_key_exists('width', $this->image->getOptions()));
     }
 }

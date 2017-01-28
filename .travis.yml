@@ -1,17 +1,18 @@
 language: php
 
-php:
-  - 5.6
-  - 7.0
+services:
+  - docker
 
-before_script:
-  - composer install
+before_install:
+  - docker build -t flyimg .
+  - docker run -t -d -i -v $(pwd):/var/www/html --name flyimg flyimg
+  - docker exec flyimg composer install
 
-env:
-  - nocache=1
-
-script: vendor/bin/phpunit
+script:
+  - docker exec flyimg vendor/bin/phpunit
+  - docker exec flyimg vendor/bin/phpcs --standard=PSR2 src/
 
 notifications:
   email:
     - sadoknet@gmail.com
+    - baamenabar@gmail.com

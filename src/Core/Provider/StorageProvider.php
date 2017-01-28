@@ -2,12 +2,11 @@
 
 namespace Core\Provider;
 
-
 use Aws\S3\S3Client;
+use Core\Exception\MissingParamsException;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use WyriHaximus\SliFly\FlysystemServiceProvider;
-use Silex\Application;
 
 /**
  * Storage class to manage Storage provider from FlySystem
@@ -60,7 +59,7 @@ class StorageProvider implements ServiceProviderInterface
     {
         $s3Params = $app['params']['aws_s3'];
         if (in_array("", $s3Params)) {
-            throw new \Exception("One of AWS S3 parameters in empty ! ");
+            throw new MissingParamsException("One of AWS S3 parameters in empty ! ");
         }
         $s3Client = new S3Client([
             'credentials' => [
@@ -84,4 +83,3 @@ class StorageProvider implements ServiceProviderInterface
         ]);
     }
 }
-

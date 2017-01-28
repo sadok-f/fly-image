@@ -3,7 +3,9 @@
 namespace Core\Controller;
 
 use Core\Entity\Image;
+use Core\Service\ImageProcessor;
 use Silex\Application;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class CoreController
@@ -29,7 +31,20 @@ class CoreController
     public function generateImageResponse(Image $image, $imageContent)
     {
         $response = new Response();
-        $response->headers->set('Content-Type', 'image/jpeg');
+        $response->setContent($imageContent);
+        $response = $this->setHeadersContent($image, $response);
+        $image->unlinkUsedFiles();
+        return $response;
+    }
+
+    /**
+     * @param Image $image
+     * @param Response $response
+     * @return Response
+     */
+    protected function setHeadersContent(Image $image, Response $response)
+    {
+        $response->headers->set('Content-Type', $image->getResponseContentType());
 
         $expireDate = new \DateTime();
         $expireDate->add(new \DateInterval('P1Y'));
@@ -45,12 +60,8 @@ class CoreController
             $response->setExpires(null)->expire();
 
             $response->headers->set('im-identify', $this->app['image.processor']->getImageIdentity($image));
-            $response->headers->set('im-command', $image->getFinalCommandStr());
+            $response->headers->set('im-command', $image->getCommandString());
         }
-
-        $response->setContent($imageContent);
-
-        $image->unlinkUsedFiles();
         return $response;
     }
 }

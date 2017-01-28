@@ -1,12 +1,21 @@
 <?php
 
 namespace Core\Entity;
+
+use Core\Exception\ReadFileException;
+use Symfony\Component\HttpFoundation\Request;
+
 /**
  * Class Image
  * @package Core\Entity
  */
 class Image
 {
+
+    /** Content TYPE */
+    const WEBP_CONTENT_TYPE = 'image/webp';
+    const JPEG_CONTENT_TYPE = 'image/jpeg';
+
     /** @var array */
     protected $options = [];
 
@@ -23,10 +32,13 @@ class Image
     protected $temporaryFile;
 
     /** @var string */
-    protected $finalCommandStr;
+    protected $commandString;
 
     /** @var array */
     protected $defaultParams;
+
+    /** @var  Request */
+    protected $request;
 
     /**
      * Image constructor.
@@ -39,6 +51,8 @@ class Image
         $this->defaultParams = $defaultParams;
         $this->options = $this->parseOptions($options);
         $this->sourceFile = $sourceFile;
+
+        $this->request = Request::createFromGlobals();
         $this->saveToTemporaryFile();
         $this->generateFilesName();
     }
@@ -118,14 +132,14 @@ class Image
     /**
      * @param $commandStr
      */
-    public function setFinalCommandStr($commandStr)
+    public function setCommandString($commandStr)
     {
-        $this->finalCommandStr = $commandStr;
+        $this->commandString = $commandStr;
     }
 
-    public function getFinalCommandStr()
+    public function getCommandString()
     {
-        return $this->finalCommandStr;
+        return $this->commandString;
     }
 
     /**
@@ -134,11 +148,12 @@ class Image
      * @param $options
      * @return array
      */
-    public function parseOptions($options)
+    protected function parseOptions($options)
     {
         $defaultOptions = $this->defaultParams['default_options'];
         $optionsKeys = $this->defaultParams['options_keys'];
-        $optionsSeparator = !empty($this->defaultParams['options_separator']) ? $this->defaultParams['options_separator'] : ',';
+        $optionsSeparator = !empty($this->defaultParams['options_separator']) ?
+            $this->defaultParams['options_separator'] : ',';
         $optionsUrl = explode($optionsSeparator, $options);
         $options = [];
         foreach ($optionsUrl as $option) {
@@ -156,10 +171,11 @@ class Image
      *
      * @throws \Exception
      */
-    public function saveToTemporaryFile()
+    protected function saveToTemporaryFile()
     {
         if (!$resource = @fopen($this->getSourceFile(), "r")) {
-            throw  new \Exception('Error occurred while trying to read the file Url : ' . $this->getSourceFile());
+            throw  new ReadFileException('Error occurred while trying to read the file Url : '
+                . $this->getSourceFile());
         }
         $content = "";
         while ($line = fread($resource, 1024)) {
@@ -173,14 +189,17 @@ class Image
      * Extract a value from given array and unset it.
      *
      * @param $key
+     * @param $remove
      * @return null
      */
-    public function extractByKey($key)
+    public function extractByKey($key, $remove = true)
     {
         $value = null;
         if (isset($this->options[$key])) {
             $value = $this->options[$key];
-            unset($this->options[$key]);
+            if ($remove) {
+                unset($this->options[$key]);
+            }
         }
         return $value;
     }
@@ -199,9 +218,9 @@ class Image
     }
 
     /**
-     *
+     * Generate files name + files path
      */
-    public function generateFilesName()
+    protected function generateFilesName()
     {
         $hashedOptions = $this->options;
         unset($hashedOptions['refresh']);
@@ -211,5 +230,25 @@ class Image
         if ($this->options['refresh']) {
             $this->newFilePath .= uniqid("-", true);
         }
+        if ($this->isWebPSupport()) {
+            $this->newFilePath .= '.webp';
+        }
+    }
+
+    /**
+     * @return bool
+     */
+    public function isWebPSupport()
+    {
+        return in_array(self::WEBP_CONTENT_TYPE, $this->request->getAcceptableContentTypes())
+            && $this->extractByKey('webp-support', false);
+    }
+
+    /**
+     * @return string
+     */
+    public function getResponseContentType()
+    {
+        return $this->isWebPSupport() ? self::WEBP_CONTENT_TYPE : self::JPEG_CONTENT_TYPE;
     }
 }

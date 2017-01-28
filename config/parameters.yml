@@ -1,10 +1,10 @@
 application_name: Flyimg.io
 
 #debug
-debug: false
+debug: true
 
-#path to mozjpeg bin
-mozjpeg_path: /opt/mozjpeg/bin/cjpeg
+#WebP support Enabled
+webp_support: false
 
 #Number of days for header cache expires `max_age`
 header_cache_days: 365
@@ -53,6 +53,8 @@ options_keys:
   ett: extent
   par: preserve-aspect-ratio
   pns: preserve-natural-size
+  webp: webp-support
+  webpl: webp-lossless
 
 
 #Default options values
@@ -78,5 +80,7 @@ default_options:
   extent: null
   preserve-aspect-ratio: 1
   preserve-natural-size: 1
+  webp-support: 1
+  webp-lossless: 0
   # private options set here
   thread: 1
