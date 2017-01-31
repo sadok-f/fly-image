@@ -46,6 +46,7 @@ class CoreController
     {
         $response->headers->set('Content-Type', $image->getResponseContentType());
 
+        /** @todo: move all this cache header logic to its own method  */
         $expireDate = new \DateTime();
         $expireDate->add(new \DateInterval('P1Y'));
         $response->setExpires($expireDate);
@@ -59,7 +60,7 @@ class CoreController
             $response->headers->set('Cache-Control', 'no-cache, private');
             $response->setExpires(null)->expire();
 
-            $response->headers->set('im-identify', $this->app['image.processor']->getImageIdentity($image));
+            $response->headers->set('im-identify', $image->getInfo());
             $response->headers->set('im-command', $image->getCommandString());
         }
         return $response;
