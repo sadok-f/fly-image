@@ -16,7 +16,6 @@ class ImageProcessor
     const MOZJPEG_COMMAND = '/opt/mozjpeg/bin/cjpeg';
     const IM_CONVERT_COMMAND = '/usr/bin/convert';
     const IM_MOGRIFY_COMMAND = '/usr/bin/mogrify';
-    const IM_IDENTITY_COMMAND = '/usr/bin/identify';
     const FACEDETECT_COMMAND = '/usr/local/bin/facedetect';
 
     /** Image options excluded from IM command */
@@ -202,11 +201,17 @@ class ImageProcessor
     protected function applyQuality(Image $image, $command)
     {
         $quality = $image->extractByKey('quality');
+        $sourceIsPng = $image->getSourceMimeType() === 'image/png';
         /** WebP format */
         if ($this->params['webp_support'] && $image->isWebPSupport()) {
-            $lossLess = $image->extractByKey('webp-lossless') ? 'true' : 'false';
+            $lossLess = ($image->extractByKey('webp-lossless') || $sourceIsPng) ? 'true' : 'false';
             $command[] = "-quality " . escapeshellarg($quality) .
                 " -define webp:lossless=" . $lossLess . " " . escapeshellarg($image->getNewFilePath());
+        } /** if the source is a PNG **/
+        elseif ($sourceIsPng) {
+            // for now it's just default compression. @todo: optimize PNG output.
+            $command[] = "-quality " . escapeshellarg($quality) .
+                " " . escapeshellarg($image->getNewFilePath());
         } /** MozJpeg compression */
         elseif (is_executable(self::MOZJPEG_COMMAND) && $image->extractByKey('mozjpeg') == 1) {
             $command[] = "TGA:- | " . escapeshellarg(self::MOZJPEG_COMMAND)
@@ -242,7 +247,7 @@ class ImageProcessor
             $size .= (string)'x' . $targetHeight;
         }
 
-        // When width and height a whole bunch of special cases must be taken into consideration.
+        // When width AND height are set, a whole bunch of special cases must be taken into consideration.
         // resizing constraints (< > ^ !) can only be applied to geometry with both width AND height
         $preserveNaturalSize = $image->extractByKey('preserve-natural-size');
         $preserveAspectRatio = $image->extractByKey('preserve-aspect-ratio');
@@ -273,18 +278,6 @@ class ImageProcessor
         }
 
         return [$size, $extent, $gravity];
-    }
-
-
-    /**
-     * Get the image Identity information
-     * @param Image $image
-     * @return string
-     */
-    public function getImageIdentity(Image $image)
-    {
-        $output = $this->execute(self::IM_IDENTITY_COMMAND . " " . $image->getNewFilePath());
-        return !empty($output[0]) ? $output[0] : "";
     }
 
     /**
@@ -319,6 +312,7 @@ class ImageProcessor
     protected function checkRestrictedDomains(Image $image)
     {
         //check restricted_domains is enabled
+        // @todo: move the check domain before we load the remote file. It should be done in Image::saveToTemporaryFile() method, that way we save ourselves the request and download time before answering "forbidden".
         if ($this->params['restricted_domains'] &&
             is_array($this->params['whitelist_domains']) &&
             !in_array(parse_url($image->getSourceFile(), PHP_URL_HOST), $this->params['whitelist_domains'])

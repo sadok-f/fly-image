@@ -2,6 +2,7 @@
 
 namespace Core\Entity;
 
+use Core\Exception\AppException;
 use Core\Exception\ReadFileException;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -11,10 +12,13 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class Image
 {
+    /** Bin path */
+    const IM_IDENTITY_COMMAND = '/usr/bin/identify';
 
     /** Content TYPE */
-    const WEBP_CONTENT_TYPE = 'image/webp';
-    const JPEG_CONTENT_TYPE = 'image/jpeg';
+    const WEBP_MIME_TYPE = 'image/webp';
+    const JPEG_MIME_TYPE = 'image/jpeg';
+    const PNG_MIME_TYPE = 'image/png';
 
     /** @var array */
     protected $options = [];
@@ -31,6 +35,9 @@ class Image
     /** @var string */
     protected $temporaryFile;
 
+    /** @var array Associative array with data about the source file */
+    protected $temporaryFileInfo;
+
     /** @var string */
     protected $commandString;
 
@@ -39,6 +46,17 @@ class Image
 
     /** @var  Request */
     protected $request;
+
+    /** @var  Information Map to get and store file info */
+    protected $defaultInfoMap = [
+        'mime'               => '%m',
+        'colorDepth'         => '%[type]',
+        'width'              => '%[width]',
+        'height'             => '%[height]',
+        'compressionAmmount' => '%Q',
+        'compressionType'    => '%C',
+        'alphaChannel'       => '%A'
+        ];
 
     /**
      * Image constructor.
@@ -130,6 +148,25 @@ class Image
     }
 
     /**
+     * @return string
+     */
+    public function getTemporaryFileInfo()
+    {
+        return $this->temporaryFileInfo;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSourceMimeType()
+    {
+        if (empty($this->temporaryFileInfo) || empty($this->temporaryFileInfo['mime'])) {
+            return '';
+        }
+        return strtolower('image/'.$this->temporaryFileInfo['mime']);
+    }
+
+    /**
      * @param $commandStr
      */
     public function setCommandString($commandStr)
@@ -140,6 +177,48 @@ class Image
     public function getCommandString()
     {
         return $this->commandString;
+    }
+
+    /**
+     * Get the image Identity information
+     * For formating details see https://www.imagemagick.org/script/escape.php
+     * @param array    $properties associative array of the properties to check.
+     * @return string
+     */
+    public function getInfo($properties = [])
+    {
+        // @todo: check if the temporatyFile path has changed, if not, return the latest result.
+        $formating = ' ';
+        if(count($properties)) {
+            $formating = ' -format "' . implode(' ', $properties) . '" ';
+        }
+        $output = $this->execute(self::IM_IDENTITY_COMMAND . $formating . $this->temporaryFile);
+        return $this->parseImageInfo($output, $properties);
+    }
+
+    /**
+     * Parse the info output for an IM idetify 
+     * it will be parsed according to the $propMap using it's keys
+     * @param  array    $stdOut  Theoutput from exec afrer calling the image magic identify
+     * @param  array    $propMap associative array that was used in the getInfo
+     * @return array             Same keys as propMap but with the falues populated.
+     */
+    protected function parseImageInfo($stdOut, $propMap) {
+        if(empty($stdOut[0])) {
+            return [];
+        }
+
+        // if no property Map was given return raw output
+        if(empty($propMap)) {
+            !empty($output[0]) ? $output[0] : "";
+        }
+        $outputProps = explode(' ', $stdOut[0]);
+        $count = 0;
+        foreach ($propMap as $key => $value) {
+            $propMap[$key] = $outputProps[$count];
+            $count++;
+        }
+        return $propMap;
     }
 
     /**
@@ -167,7 +246,7 @@ class Image
 
 
     /**
-     * Save given image to temporary file and return the path
+     * Save given image to temporary file and store the path
      *
      * @throws \Exception
      */
@@ -183,6 +262,7 @@ class Image
         }
         $this->temporaryFile = TMP_DIR . uniqid("", true);
         file_put_contents($this->temporaryFile, $content);
+        $this->temporaryFileInfo = $this->getInfo($this->defaultInfoMap);
     }
 
     /**
@@ -228,11 +308,47 @@ class Image
         $this->newFilePath = TMP_DIR . $this->newFileName;
 
         if ($this->options['refresh']) {
+
+            // does this make a new path instead of ovewriting the the file with the same hash?
+            // does this prevent the cache from being updated?
             $this->newFilePath .= uniqid("-", true);
         }
-        if ($this->isWebPSupport()) {
-            $this->newFilePath .= '.webp';
+
+        // setting file extension, this should be moved to it's own method.
+        $fileExtension = '.jpg';
+        if($this->getSourceMimeType() === PNG_MIME_TYPE) {
+            $fileExtension = '.png';
         }
+        if ($this->isWebPSupport() || $this->getSourceMimeType() === WEBP_MIME_TYPE) {
+            $fileExtension = '.webp';
+        }
+        $this->newFilePath .= $fileExtension;
+    }
+
+    /**
+     * @param $commandStr
+     * @return string
+     * @throws \Exception
+     * @todo This si a copy of the execute command found in the ImageProcessor class. Maybe have it in some sort of helper?
+     */
+    protected function execute($commandStr)
+    {
+        exec($commandStr, $output, $code);
+        if (count($output) === 0) {
+            $outputError = $code;
+        } else {
+            $outputError = implode(PHP_EOL, $output);
+        }
+
+        if ($code !== 0) {
+            throw new AppException(
+                "Command failed. The exit code: " .
+                $outputError . "
+                The last line of output:
+                " . $commandStr
+            );
+        }
+        return $output;
     }
 
     /**
@@ -240,7 +356,7 @@ class Image
      */
     public function isWebPSupport()
     {
-        return in_array(self::WEBP_CONTENT_TYPE, $this->request->getAcceptableContentTypes())
+        return in_array(self::WEBP_MIME_TYPE, $this->request->getAcceptableContentTypes())
             && $this->extractByKey('webp-support', false);
     }
 
@@ -249,6 +365,6 @@ class Image
      */
     public function getResponseContentType()
     {
-        return $this->isWebPSupport() ? self::WEBP_CONTENT_TYPE : self::JPEG_CONTENT_TYPE;
+        return $this->isWebPSupport() ? self::WEBP_MIME_TYPE : self::JPEG_MIME_TYPE;
     }
 }
