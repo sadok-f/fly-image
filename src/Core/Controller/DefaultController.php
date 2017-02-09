@@ -16,42 +16,34 @@ class DefaultController extends CoreController
     }
 
     /**
-     * @param $options
+     * @param      $options
      * @param null $imageSrc
      * @return Response
      */
     public function uploadAction($options, $imageSrc = null)
     {
-        /** @var \Core\Service\ImageProcessor $manager */
-        $manager = $this->app['image.processor'];
-        $image = new Image($options, $imageSrc, $this->app['params']);
         try {
-            $image = $manager->process($image);
+            $image = $this->getImageProcessor()->process($options, $imageSrc);
         } catch (\Exception $e) {
-            $image->unlinkUsedFiles();
-            $formattedMessage = '<pre>' . $e->getMessage() . '</pre>';
-            return new Response($formattedMessage, Response::HTTP_FORBIDDEN);
+            return new Response($e->getMessage(), Response::HTTP_FORBIDDEN);
         }
+
         return $this->generateImageResponse($image);
     }
 
     /**
-     * @param $options
+     * @param      $options
      * @param null $imageSrc
      * @return Response
      */
     public function pathAction($options, $imageSrc = null)
     {
-        /** @var \Core\Service\ImageProcessor $manager */
-        $manager = $this->app['image.processor'];
-        $image = new Image($options, $imageSrc, $this->app['params']);
         try {
-            $image = $manager->process($image);
+            $image = $this->getImageProcessor()->process($options, $imageSrc);
         } catch (\Exception $e) {
-            $image->unlinkUsedFiles();
-            $formattedMessage = '<pre>' . $e->getMessage() . '</pre>';
-            return new Response($formattedMessage, Response::HTTP_FORBIDDEN);
+            return new Response($e->getMessage(), Response::HTTP_FORBIDDEN);
         }
+
         return $this->generatePathResponse($image);
     }
 }

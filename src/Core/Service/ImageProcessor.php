@@ -35,7 +35,7 @@ class ImageProcessor
     /**
      * ImageProcessor constructor.
      *
-     * @param array $params
+     * @param array      $params
      * @param Filesystem $filesystem
      */
     public function __construct($params, Filesystem $filesystem)
@@ -45,24 +45,30 @@ class ImageProcessor
     }
 
     /**
-     * Process give source file with given options
-     *
-     * @param Image $image
+     * @param      $options
+     * @param null $imageSrc
      * @return Image
      * @throws \Exception
      */
-    public function process(Image $image)
+    public function process($options, $imageSrc = null)
     {
-        $this->checkRestrictedDomains($image);
+        $image = new Image($options, $imageSrc, $this->params);
 
-        if ($this->filesystem->has($image->getNewFileName()) && $image->getOptions()['refresh']) {
-            $this->filesystem->delete($image->getNewFileName());
-        }
-        if (!$this->filesystem->has($image->getNewFileName())) {
-            $this->saveNewFile($image);
-        }
+        try {
+            $this->checkRestrictedDomains($image);
 
-        $image->setContent($this->filesystem->read($image->getNewFileName()));
+            if ($this->filesystem->has($image->getNewFileName()) && $image->getOptions()['refresh']) {
+                $this->filesystem->delete($image->getNewFileName());
+            }
+            if (!$this->filesystem->has($image->getNewFileName())) {
+                $this->saveNewFile($image);
+            }
+
+            $image->setContent($this->filesystem->read($image->getNewFileName()));
+        } catch (\Exception $e) {
+            $image->unlinkUsedFiles();
+            throw $e;
+        }
 
         return $image;
     }
@@ -102,14 +108,14 @@ class ImageProcessor
      * Face detection cropping
      *
      * @param Image $image
-     * @param int $faceCropPosition
+     * @param int   $faceCropPosition
      */
     protected function processCroppingFaces(Image $image, $faceCropPosition = 0)
     {
         if (!is_executable(self::FACEDETECT_COMMAND)) {
             return;
         }
-        $commandStr = self::FACEDETECT_COMMAND . " " . $image->getTemporaryFile();
+        $commandStr = self::FACEDETECT_COMMAND." ".$image->getTemporaryFile();
         $output = $this->execute($commandStr);
         if (empty($output[$faceCropPosition])) {
             return;
@@ -118,8 +124,8 @@ class ImageProcessor
         if (count($geometry) == 4) {
             list($geometryX, $geometryY, $geometryW, $geometryH) = $geometry;
             $cropCmdStr =
-                self::IM_CONVERT_COMMAND .
-                " '{$image->getTemporaryFile()}' -crop {$geometryW}x{$geometryH}+{$geometryX}+{$geometryY} " .
+                self::IM_CONVERT_COMMAND.
+                " '{$image->getTemporaryFile()}' -crop {$geometryW}x{$geometryH}+{$geometryX}+{$geometryY} ".
                 $image->getTemporaryFile();
             $this->execute($cropCmdStr);
         }
@@ -135,7 +141,7 @@ class ImageProcessor
         if (!is_executable(self::FACEDETECT_COMMAND)) {
             return;
         }
-        $commandStr = self::FACEDETECT_COMMAND . " " . $image->getTemporaryFile();
+        $commandStr = self::FACEDETECT_COMMAND." ".$image->getTemporaryFile();
         $output = $this->execute($commandStr);
         if (empty($output)) {
             return;
@@ -144,9 +150,9 @@ class ImageProcessor
             $geometry = explode(" ", $outputLine);
             if (count($geometry) == 4) {
                 list($geometryX, $geometryY, $geometryW, $geometryH) = $geometry;
-                $cropCmdStr = self::IM_MOGRIFY_COMMAND .
-                    " -gravity NorthWest -region {$geometryW}x{$geometryH}+{$geometryX}+{$geometryY} " .
-                    "-scale '10%' -scale '1000%' " .
+                $cropCmdStr = self::IM_MOGRIFY_COMMAND.
+                    " -gravity NorthWest -region {$geometryW}x{$geometryH}+{$geometryX}+{$geometryY} ".
+                    "-scale '10%' -scale '1000%' ".
                     $image->getTemporaryFile();
                 $this->execute($cropCmdStr);
             }
@@ -169,13 +175,13 @@ class ImageProcessor
         // we default to thumbnail
         $resizeOperator = $resize ? 'resize' : 'thumbnail';
         $command = [];
-        $command[] = self::IM_CONVERT_COMMAND .
-            " " . $image->getTemporaryFile() .
-            ' -' . $resizeOperator . ' ' . $size . $gravity . $extent .
+        $command[] = self::IM_CONVERT_COMMAND.
+            " ".$image->getTemporaryFile().
+            ' -'.$resizeOperator.' '.$size.$gravity.$extent.
             ' -colorspace sRGB';
 
         if (!empty($thread)) {
-            $command[] = "-limit thread " . escapeshellarg($thread);
+            $command[] = "-limit thread ".escapeshellarg($thread);
         }
 
         // strip is added internally by ImageMagick when using -thumbnail
@@ -185,7 +191,7 @@ class ImageProcessor
 
         foreach ($image->getOptions() as $key => $value) {
             if (!empty($value) && !in_array($key, self::EXCLUDED_IM_OPTIONS)) {
-                $command[] = "-{$key} " . escapeshellarg($value);
+                $command[] = "-{$key} ".escapeshellarg($value);
             }
         }
 
@@ -199,7 +205,7 @@ class ImageProcessor
      * Apply the Quality processor based on options
      *
      * @param Image $image
-     * @param $command
+     * @param       $command
      * @return array
      */
     protected function applyQuality(Image $image, $command)
@@ -208,19 +214,20 @@ class ImageProcessor
         /** WebP format */
         if (is_executable(self::CWEBP_COMMAND) && $image->isWebPSupport()) {
             $lossLess = $image->extractByKey('webp-lossless') ? 'true' : 'false';
-            $command[] = "-quality " . escapeshellarg($quality) .
-                " -define webp:lossless=" . $lossLess . " " . escapeshellarg($image->getNewFilePath());
+            $command[] = "-quality ".escapeshellarg($quality).
+                " -define webp:lossless=".$lossLess." ".escapeshellarg($image->getNewFilePath());
         } /** MozJpeg compression */
         elseif (is_executable(self::MOZJPEG_COMMAND) && $image->isMozJpegSupport()) {
-            $command[] = "TGA:- | " . escapeshellarg(self::MOZJPEG_COMMAND)
-                . " -quality " . escapeshellarg($quality)
-                . " -outfile " . escapeshellarg($image->getNewFilePath())
-                . " -targa";
+            $command[] = "TGA:- | ".escapeshellarg(self::MOZJPEG_COMMAND)
+                ." -quality ".escapeshellarg($quality)
+                ." -outfile ".escapeshellarg($image->getNewFilePath())
+                ." -targa";
         } /** default ImageMagick compression */
         else {
-            $command[] = "-quality " . escapeshellarg($quality) .
-                " " . escapeshellarg($image->getNewFilePath());
+            $command[] = "-quality ".escapeshellarg($quality).
+                " ".escapeshellarg($image->getNewFilePath());
         }
+
         return $command;
     }
 
@@ -242,7 +249,7 @@ class ImageProcessor
             $size .= (string)escapeshellarg($targetWidth);
         }
         if ($targetHeight) {
-            $size .= (string)'x' . escapeshellarg($targetHeight);
+            $size .= (string)'x'.escapeshellarg($targetHeight);
         }
 
         // When width and height a whole bunch of special cases must be taken into consideration.
@@ -254,8 +261,8 @@ class ImageProcessor
         $gravity = '';
 
         if ($targetWidth && $targetHeight) {
-            $extent = ' -extent ' . $size;
-            $gravity = ' -gravity ' . escapeshellarg($gravityValue);
+            $extent = ' -extent '.$size;
+            $gravity = ' -gravity '.escapeshellarg($gravityValue);
             $resizingConstraints = '';
             $resizingConstraints .= $preserveNaturalSize ? '\>' : '';
             if ($crop) {
@@ -289,7 +296,8 @@ class ImageProcessor
      */
     public function getImageIdentity(Image $image)
     {
-        $output = $this->execute(self::IM_IDENTITY_COMMAND . " " . $image->getNewFilePath());
+        $output = $this->execute(self::IM_IDENTITY_COMMAND." ".$image->getNewFilePath());
+
         return !empty($output[0]) ? $output[0] : "";
     }
 
@@ -309,11 +317,12 @@ class ImageProcessor
 
         if ($code !== 0) {
             throw new AppException(
-                "Command failed. The exit code: " .
-                $outputError . "<br>The last line of output: " .
+                "Command failed. The exit code: ".
+                $outputError."<br>The last line of output: ".
                 $commandStr
             );
         }
+
         return $output;
     }
 
@@ -330,9 +339,13 @@ class ImageProcessor
             !in_array(parse_url($image->getSourceFile(), PHP_URL_HOST), $this->params['whitelist_domains'])
         ) {
             throw  new AppException(
-                'Restricted domains enabled, the domain your fetching from is not allowed: ' .
+                'Restricted domains enabled, the domain your fetching from is not allowed: '.
                 parse_url($image->getSourceFile(), PHP_URL_HOST)
             );
         }
+    }
+
+    public function unlinkUsedFiles()
+    {
     }
 }

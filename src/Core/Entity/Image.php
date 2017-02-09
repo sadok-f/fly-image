@@ -60,8 +60,8 @@ class Image
     /**
      * Image constructor.
      * @param string $options
-     * @param $sourceFile
-     * @param $defaultParams
+     * @param        $sourceFile
+     * @param        $defaultParams
      */
     public function __construct($options, $sourceFile, $defaultParams)
     {
@@ -180,6 +180,7 @@ class Image
                 $options[$optionsKeys[$optArray[0]]] = $optArray[1];
             }
         }
+
         return array_merge($defaultOptions, $options);
     }
 
@@ -192,14 +193,16 @@ class Image
     protected function saveToTemporaryFile()
     {
         if (!$resource = @fopen($this->getSourceFile(), "r")) {
-            throw  new ReadFileException('Error occurred while trying to read the file Url : '
-                . $this->getSourceFile());
+            throw  new ReadFileException(
+                'Error occurred while trying to read the file Url : '
+                .$this->getSourceFile()
+            );
         }
         $content = "";
         while ($line = fread($resource, 1024)) {
             $content .= $line;
         }
-        $this->temporaryFile = TMP_DIR . uniqid("", true);
+        $this->temporaryFile = TMP_DIR.uniqid("", true);
         file_put_contents($this->temporaryFile, $content);
         $this->sourceMimeType = finfo_file(finfo_open(FILEINFO_MIME_TYPE), $this->temporaryFile);
     }
@@ -208,18 +211,16 @@ class Image
      * Extract a value from given array and unset it.
      *
      * @param $key
-     * @param $remove
      * @return null
      */
-    public function extractByKey($key, $remove = true)
+    public function extractByKey($key)
     {
         $value = null;
         if (isset($this->options[$key])) {
             $value = $this->options[$key];
-            if ($remove) {
-                unset($this->options[$key]);
-            }
+            unset($this->options[$key]);
         }
+
         return $value;
     }
 
@@ -243,8 +244,8 @@ class Image
     {
         $hashedOptions = $this->options;
         unset($hashedOptions['refresh']);
-        $this->newFileName = md5(implode('.', $hashedOptions) . $this->sourceFile);
-        $this->newFilePath = TMP_DIR . $this->newFileName;
+        $this->newFileName = md5(implode('.', $hashedOptions).$this->sourceFile);
+        $this->newFilePath = TMP_DIR.$this->newFileName;
 
         if ($this->options['refresh']) {
             $this->newFilePath .= uniqid("-", true);
@@ -258,18 +259,18 @@ class Image
     {
         $outputExtension = $this->extractByKey('output');
         if ($outputExtension == self::EXT_AUTO) {
-            $fileExtension = '.' . self::EXT_JPG;
+            $fileExtension = '.'.self::EXT_JPG;
             if ($this->isPngSupport()) {
-                $fileExtension = '.' . self::EXT_PNG;
+                $fileExtension = '.'.self::EXT_PNG;
             }
             if ($this->isWebPSupport() || $this->getSourceMimeType() === self::WEBP_MIME_TYPE) {
-                $fileExtension = '.' . self::EXT_WEBP;
+                $fileExtension = '.'.self::EXT_WEBP;
             }
         } else {
             if (!in_array($outputExtension, [self::EXT_PNG, self::EXT_JPG, self::EXT_JPG, self::EXT_WEBP])) {
                 throw new InvalidArgumentException("Invalid file output requested");
             }
-            $fileExtension = '.' . $outputExtension;
+            $fileExtension = '.'.$outputExtension;
         }
         $this->newFilePath .= $fileExtension;
         $this->newFileName .= $fileExtension;
@@ -313,6 +314,7 @@ class Image
         if ($this->isPngSupport()) {
             return self::PNG_MIME_TYPE;
         }
+
         return self::JPEG_MIME_TYPE;
     }
 

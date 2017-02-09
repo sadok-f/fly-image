@@ -41,25 +41,28 @@ class StorageProvider implements ServiceProviderInterface
      */
     protected function registerStorageSystemLocal(Container $app)
     {
-        $app->register(new FlysystemServiceProvider(), [
-            'flysystem.filesystems' => [
-                'upload_dir' => [
-                    'adapter' => 'League\Flysystem\Adapter\Local',
-                    'args' => [UPLOAD_DIR]
+        $app->register(
+            new FlysystemServiceProvider(),
+            [
+                'flysystem.filesystems' => [
+                    'upload_dir' => [
+                        'adapter' => 'League\Flysystem\Adapter\Local',
+                        'args' => [UPLOAD_DIR],
+                    ],
                 ],
-            ],
-        ]);
+            ]
+        );
 
         $app['flysystems']['file_path_resolver'] = function () use ($app) {
-            $hostname = getenv('HOSTNAME');
+            $hostname = getenv('HOSTNAME_URL');
             if (empty($hostname)) {
                 $schema = $app['request_context']->getScheme();
                 $host = $app['request_context']->getHost();
                 $port = $app['request_context']->getHttpPort();
-                $hostname = $schema . '://' . $host . ($port == '80' ? '' : ':' . $port);
+                $hostname = $schema.'://'.$host.($port == '80' ? '' : ':'.$port);
             }
 
-            return $hostname . '/' . UPLOAD_WEB_DIR . '%s';
+            return $hostname.'/'.UPLOAD_WEB_DIR.'%s';
         };
     }
 
@@ -73,29 +76,34 @@ class StorageProvider implements ServiceProviderInterface
         if (in_array("", $s3Params)) {
             throw new MissingParamsException("One of AWS S3 parameters in empty ! ");
         }
-        $s3Client = new S3Client([
-            'credentials' => [
-                'key' => $s3Params['access_id'],
-                'secret' => $s3Params['secret_key'],
-            ],
-            'region' => $s3Params['region'],
-            'version' => 'latest',
-        ]);
-
-        $app->register(new FlysystemServiceProvider(), [
-            'flysystem.filesystems' => [
-                'upload_dir' => [
-                    'adapter' => 'League\Flysystem\AwsS3v3\AwsS3Adapter',
-                    'args' => [
-                        $s3Client,
-                        $s3Params['bucket_name']
-                    ]
-                ]
+        $s3Client = new S3Client(
+            [
+                'credentials' => [
+                    'key' => $s3Params['access_id'],
+                    'secret' => $s3Params['secret_key'],
+                ],
+                'region' => $s3Params['region'],
+                'version' => 'latest',
             ]
-        ]);
+        );
+
+        $app->register(
+            new FlysystemServiceProvider(),
+            [
+                'flysystem.filesystems' => [
+                    'upload_dir' => [
+                        'adapter' => 'League\Flysystem\AwsS3v3\AwsS3Adapter',
+                        'args' => [
+                            $s3Client,
+                            $s3Params['bucket_name'],
+                        ],
+                    ],
+                ],
+            ]
+        );
 
         $app['flysystems']['file_path_resolver'] = function () use ($app, $s3Params) {
-            return sprintf('https://s3.%s.amazonaws.com/%s/', $s3Params['region'], $s3Params['bucket_name']) . '%s';
+            return sprintf('https://s3.%s.amazonaws.com/%s/', $s3Params['region'], $s3Params['bucket_name']).'%s';
         };
     }
 }

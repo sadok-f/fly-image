@@ -3,6 +3,7 @@
 namespace Core\Controller;
 
 use Core\Entity\Image;
+use Core\Service\ImageProcessor;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -22,13 +23,22 @@ class CoreController
     }
 
     /**
-     * @param $templateName
+     * @return ImageProcessor
+     */
+    public function getImageProcessor()
+    {
+        return $this->app['image.processor'];
+    }
+
+    /**
+     * @param       $templateName
      * @param array $params
      * @return Response
      */
     public function render($templateName, $params = [])
     {
-        $body = $this->app['twig']->render('@Core/' . $templateName, $params);
+        $body = $this->app['twig']->render('@Core/'.$templateName, $params);
+
         return new Response($body);
     }
 
@@ -42,6 +52,7 @@ class CoreController
         $response->setContent($image->getContent());
         $response = $this->setHeadersContent($image, $response);
         $image->unlinkUsedFiles();
+
         return $response;
     }
 
@@ -56,11 +67,12 @@ class CoreController
         $imagePath = sprintf($this->app['flysystems']['file_path_resolver'], $imagePath);
         $response->setContent($imagePath);
         $image->unlinkUsedFiles();
+
         return $response;
     }
 
     /**
-     * @param Image $image
+     * @param Image    $image
      * @param Response $response
      * @return Response
      */
@@ -84,6 +96,7 @@ class CoreController
             $response->headers->set('im-identify', $this->app['image.processor']->getImageIdentity($image));
             $response->headers->set('im-command', $image->getCommandString());
         }
+
         return $response;
     }
 }
