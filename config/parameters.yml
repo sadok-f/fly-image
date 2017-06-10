@@ -56,7 +56,11 @@ options_keys:
   pns: preserve-natural-size
   webpl: webp-lossless
   gf: gif-frame
-
+  e: extract
+  p1x: extract-top-x
+  p1y: extract-top-y
+  p2x: extract-bottom-x
+  p2y: extract-bottom-y
 
 #Default options values
 default_options:
@@ -84,5 +88,10 @@ default_options:
   preserve-natural-size: 1
   webp-lossless: 0
   gif-frame: 0
+  thread: 1,
+  extract: null
+  extract-top-x: null
+  extract-top-y: null
+  extract-bottom-x: null
+  extract-bottom-y: null
   # private options set here
-  thread: 1
