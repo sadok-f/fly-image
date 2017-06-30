@@ -52,9 +52,14 @@ class ImageProcessor
      */
     public function processNewImage(Image $image): Image
     {
-        $faceCrop = $image->extract('face-crop');
+        $faceCrop         = $image->extract('face-crop');
         $faceCropPosition = $image->extract('face-crop-position');
-        $faceBlur = $image->extract('face-blur');
+        $faceBlur         = $image->extract('face-blur');
+        $extract          = $image->extract('extract');
+        $topLeftX     = $image->extract('extract-top-x');
+        $topLeftY     = $image->extract('extract-top-y');
+        $bottomRightX = $image->extract('extract-bottom-x');
+        $bottomRightY = $image->extract('extract-bottom-y');
 
         $this->generateCmdString($image);
 
@@ -64,6 +69,10 @@ class ImageProcessor
 
         if ($faceCrop && !$image->isGifSupport()) {
             $this->processCroppingFaces($image, $faceCropPosition);
+        }
+
+        if ($extract) {
+            $this->processExtraction($image, $topLeftX, $topLeftY, $bottomRightX, $bottomRightY);
         }
 
         $this->execute($image->getCommandString());
@@ -102,6 +111,28 @@ class ImageProcessor
                 $image->getOriginalFile();
             $this->execute($cropCmdStr);
         }
+    }
+
+    /**
+     * Extracts a region from an image
+     *
+     * @param Image $image
+     * @param int   $topLeftX
+     * @param int   $topLeftY
+     * @param int   $bottomRightX
+     * @param int   $bottomRightY
+     */
+    protected function processExtraction(Image $image, $topLeftX, $topLeftY, $bottomRightX, $bottomRightY)
+    {
+        $geometryW = $bottomRightX - $topLeftX;
+        $geometryH = $bottomRightY - $topLeftY;
+
+        $cropCmdStr
+            = self::IM_CONVERT_COMMAND.
+              " '{$image->getTemporaryFile()}' -crop '{$geometryW}'x'{$geometryH}'+'{$topLeftX}'+'{$topLeftY}' ".
+              $image->getTemporaryFile();
+
+        $this->execute($cropCmdStr);
     }
 
     /**
