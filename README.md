@@ -186,13 +186,13 @@ Again, it will take a few minutes to download the dependencies. Same as before, 
 
 You can navigate to your machine's IP in port 8080 (ex: http://127.0.0.1:8080/ ) ; you should get a message saying: **Hello from Flyimg!** and a small homepage of Flyimg already working. If you get any errors  at this stage it's most likely that composer has not finished installing or skipped something.
 
-You can test your image resizing service by navigating to: http://127.0.0.1:8080/upload/w_130,h_113,q_90/https://www.mozilla.org/media/img/firefox/firefox-256.e2c1fc556816.jpg
+You can test your image resizing service by navigating to: http://127.0.0.1:8080/upload/w_130,h_113,q_90/https://assets.ubuntu.com/v1/8dd99b80-ubuntu-logo14.png
 
-![ff-logo](https://oi.flyimg.io/upload/w_130,h_113,q_90/https://www.mozilla.org/media/img/firefox/firefox-256.e2c1fc556816.jpg)
+![ff-logo](https://oi.flyimg.io/upload/w_135,h_60,q_90/https://assets.ubuntu.com/v1/8dd99b80-ubuntu-logo14.png)
 
 **It's working!**
 
-This is fetching an image from Mozilla, resizing it, saving it and serving it.
+This is fetching an image from Ubuntu, resizing it, saving it and serving it.
 
 
 # How to transform images
