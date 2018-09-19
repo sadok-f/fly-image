@@ -3,6 +3,7 @@
 namespace Core\Entity;
 
 use Core\Exception\AppException;
+use Symfony\Component\Yaml\Yaml;
 
 class AppParameters
 {
@@ -21,7 +22,7 @@ class AppParameters
         if (!file_exists($paramFilePath)) {
             throw new AppException('Parameter file not found at : '.$paramFilePath);
         }
-        $this->parameters = yaml_parse(file_get_contents($paramFilePath));
+        $this->parameters = Yaml::parse(file_get_contents($paramFilePath));
     }
 
     /**

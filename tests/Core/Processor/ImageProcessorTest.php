@@ -42,8 +42,8 @@ class ImageProcessorTest extends BaseTest
     {
         $image = $this->ImageHandler->processImage($options, $sourceImage);
         $this->generatedImage[] = $image;
-        $this->assertFileExists($image->getOutputImagePath());
-        $imageDimensions = $this->imageInfo($image->getOutputImagePath())[ImageMetaInfo::IMAGE_PROP_DIMENSIONS];
+        $this->assertFileExists($image->getPath());
+        $imageDimensions = $this->imageInfo($image->getPath())[ImageMetaInfo::IMAGE_PROP_DIMENSIONS];
         $this->assertEquals($expectedSize, $imageDimensions);
     }
 
@@ -58,8 +58,8 @@ class ImageProcessorTest extends BaseTest
     {
         $image = $this->ImageHandler->processImage($options, $sourceImage);
         $this->generatedImage[] = $image;
-        $this->assertFileExists($image->getOutputImagePath());
-        $imageDimensions = $this->imageInfo($image->getOutputImagePath())['dimensions'];
+        $this->assertFileExists($image->getPath());
+        $imageDimensions = $this->imageInfo($image->getPath())['dimensions'];
         $this->assertEquals($expectedSize, $imageDimensions);
     }
 

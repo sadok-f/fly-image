@@ -2,10 +2,11 @@
 
 namespace Flyimg\Image\Command;
 
+use Flyimg\Exception\ExecFailedException;
 use Flyimg\Image\ImageInterface;
 use Flyimg\Image\LocalImageInterface;
 use Flyimg\Image\TemporaryFileImage;
-use Symfony\Component\Process\Process;
+use Flyimg\Process\ProcessContext;
 
 class ResizeCommand implements CommandInterface
 {
@@ -18,6 +19,11 @@ class ResizeCommand implements CommandInterface
      * @var int
      */
     private $height;
+
+    /**
+     * @var ProcessContext|null
+     */
+    private $context;
 
     /**
      * @param int $width
@@ -38,14 +44,22 @@ class ResizeCommand implements CommandInterface
             $input = TemporaryFileImage::fromFile($input);
         }
 
-        $process = new Process([
+        $process = $this->context->pipe(
             '/usr/bin/convert',
             '-crop', self::normalizeSize($this->width, $this->height),
             '-write', $output->path(),
-            $input->path(),
-        ]);
+            $input->path()
+        )->build();
 
         $process->run();
+        if (!$process->isSuccessful()) {
+            throw new ExecFailedException(strtr(
+                'The blur command did not run properly, message was: %message%.',
+                [
+                    '%message%' => $process->getErrorOutput(),
+                ]
+            ));
+        }
 
         return $output;
     }

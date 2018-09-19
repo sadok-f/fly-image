@@ -3,7 +3,7 @@
 namespace Tests\Core\Entity;
 
 use Core\Entity\AppParameters;
-use Core\Exception\AppException;
+use Core\Exception\FlyimgException;
 
 class AppParametersTest extends \PHPUnit_Framework_TestCase
 {
@@ -12,7 +12,7 @@ class AppParametersTest extends \PHPUnit_Framework_TestCase
      */
     public function testParamFileNotExist()
     {
-        $this->expectException(AppException::class);
+        $this->expectException(FlyimgException::class);
         $this->expectExceptionMessage('Parameter file not found at : not_existing_file.yml');
         new AppParameters('not_existing_file.yml');
     }

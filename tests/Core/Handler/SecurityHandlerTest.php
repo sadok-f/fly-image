@@ -4,7 +4,7 @@ namespace Tests\Core\Service;
 
 use Core\Entity\AppParameters;
 use Core\Exception\SecurityException;
-use Core\Handler\SecurityHandler;
+use Core\Handler\SecurityCheck;
 use Tests\Core\BaseTest;
 
 class SecurityHandlerTest extends BaseTest
@@ -19,7 +19,7 @@ class SecurityHandlerTest extends BaseTest
         /** @var AppParameters $appParameters */
         $appParameters = clone $this->app['params'];
         $appParameters->addParameter('restricted_domains', true);
-        $securityHandler = new SecurityHandler($appParameters);
+        $securityHandler = new SecurityCheck($appParameters);
 
         $securityHandler->checkRestrictedDomains(parent::PNG_TEST_IMAGE);
     }
@@ -52,7 +52,7 @@ class SecurityHandlerTest extends BaseTest
         /** @var AppParameters $appParameters */
         $appParameters = clone $this->app['params'];
         $appParameters->addParameter('security_key', '');
-        $securityHandler = new SecurityHandler($appParameters);
+        $securityHandler = new SecurityCheck($appParameters);
         $securityHandler->encrypt(parent::OPTION_URL.'/'.parent::JPG_TEST_IMAGE);
     }
 
@@ -79,7 +79,7 @@ class SecurityHandlerTest extends BaseTest
         $appParameters = clone $this->app['params'];
         $appParameters->addParameter('security_key', 'TestSecurityKey');
         $appParameters->addParameter('security_iv', 'TestSecurityIVXXXX');
-        $securityHandler = new SecurityHandler($appParameters);
+        $securityHandler = new SecurityCheck($appParameters);
         $options = parent::OPTION_URL;
         $imageSrc = parent::JPG_TEST_IMAGE;
         $hash = $securityHandler->encrypt($options.'/'.$imageSrc);
@@ -98,7 +98,7 @@ class SecurityHandlerTest extends BaseTest
         $appParameters->addParameter('security_key', 'TestSecurityKey');
         $appParameters->addParameter('security_iv', 'TestSecurityIVXXXX');
 
-        $securityHandler = new SecurityHandler($appParameters);
+        $securityHandler = new SecurityCheck($appParameters);
         $randomString = str_shuffle('AKALEOCJCNXMSOLWO5#KXMw');
         $hashedString = $securityHandler->encrypt($randomString);
         $decryptedString = $securityHandler->decrypt($hashedString);
@@ -110,7 +110,7 @@ class SecurityHandlerTest extends BaseTest
      */
     protected function checkSecurityHash($appParameters): void
     {
-        $securityHandler = new SecurityHandler($appParameters);
+        $securityHandler = new SecurityCheck($appParameters);
         $options = parent::OPTION_URL;
         $imageSrc = parent::JPG_TEST_IMAGE;
         $securityHandler->checkSecurityHash($options, $imageSrc);

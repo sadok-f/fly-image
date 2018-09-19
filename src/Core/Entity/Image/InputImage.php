@@ -3,41 +3,62 @@
 namespace Core\Entity\Image;
 
 use Core\Entity\OptionsBag;
-use Core\Exception\ReadFileException;
 use Core\Entity\ImageMetaInfo;
+use Flyimg\Image\ImageInterface;
+use Flyimg\Image\RemoteImageInterface;
+use Flyimg\Image\RemoteURLImage;
+use Flyimg\Image\TemporaryStreamImage;
 
+/**
+ * @deprecated see \Flyimg\Image\ImageInterface
+ */
 class InputImage
 {
-    /** @var OptionsBag */
-    protected $optionsBag;
+    /**
+     * @var RemoteImageInterface
+     */
+    private $source;
 
-    /** @var string */
-    protected $sourceImageUrl;
+    /**
+     * @var ImageInterface
+     */
+    private $destination;
 
-    /** @var string */
+    /**
+     * @var OptionsBag
+     */
+    private $optionsBag;
+
+    /**
+     * @var string
+     */
     protected $sourceImagePath;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     protected $sourceImageMimeType;
 
-    /** @var ImageMetaInfo */
+    /**
+     * @var ImageMetaInfo
+     */
     protected $sourceImageInfo;
 
     /**
-     * OutputImage constructor.
-     *
      * @param OptionsBag $optionsBag
      * @param string     $sourceImageUrl
      */
     public function __construct(OptionsBag $optionsBag, string $sourceImageUrl)
     {
-        $this->optionsBag = $optionsBag;
-        $this->sourceImageUrl = $sourceImageUrl;
+        $this->source = new RemoteURLImage($sourceImageUrl);
+        $this->destination = new TemporaryStreamImage();
 
-        $this->sourceImagePath = TMP_DIR.'original-'.
+        $this->optionsBag = $optionsBag;
+
+        $this->sourceImagePath = sys_get_temp_dir() . 'original-'.
             (md5(
                 $optionsBag->get('face-crop-position').
-                $this->sourceImageUrl
+                $sourceImageUrl
             ));
         $this->saveToTemporaryFile();
         $this->sourceImageInfo = new ImageMetaInfo($this->sourceImagePath);
@@ -45,34 +66,10 @@ class InputImage
 
     /**
      * Save given image to temporary file and return the path
-     *
-     * @throws \Exception
      */
     protected function saveToTemporaryFile()
     {
-        if (file_exists($this->sourceImagePath) && !$this->optionsBag->get('refresh')) {
-            return;
-        }
-
-        $opts = [
-            'http' =>
-                [
-                    'method' => 'GET',
-                    'max_redirects' => '0',
-                ],
-        ];
-        $context = stream_context_create($opts);
-
-        if (!$stream = @fopen($this->sourceImageUrl, 'r', false, $context)
-        ) {
-            throw  new ReadFileException(
-                'Error occurred while trying to read the file Url : '
-                .$this->sourceImageUrl
-            );
-        }
-        $content = stream_get_contents($stream);
-        fclose($stream);
-        file_put_contents($this->sourceImagePath, $content);
+        stream_copy_to_stream($this->source->asStream(), $this->destination->asStream());
     }
 
     /**
@@ -114,7 +111,7 @@ class InputImage
      */
     public function sourceImageUrl(): string
     {
-        return $this->sourceImageUrl;
+        return $this->source->url();
     }
 
     /**
@@ -123,6 +120,14 @@ class InputImage
     public function sourceImagePath(): string
     {
         return $this->sourceImagePath;
+    }
+
+    /**
+     * @return ImageInterface
+     */
+    public function file(): ImageInterface
+    {
+        return $this->destination;
     }
 
     /**

@@ -1,9 +1,10 @@
 <?php
 
-namespace Flyimg\Image\Processor\FaceDetection;
+namespace Flyimg\Image\FaceDetection;
 
 use Flyimg\Image\Geometry\Point;
-use Flyimg\Image\Geometry\Rectangle;
+use Flyimg\Image\Geometry\PolygonInterface;
+use Flyimg\Image\Geometry\TwoPointsRectangle;
 use Flyimg\Image\ImageInterface;
 use Flyimg\Image\LocalImageInterface;
 use Flyimg\Image\TemporaryFileImage;
@@ -28,7 +29,7 @@ class FacePositionToGeometry
     /**
      * @param ImageInterface $input
      *
-     * @return Rectangle[]
+     * @return PolygonInterface[]
      */
     public function detect(ImageInterface $input): array
     {
@@ -46,7 +47,7 @@ class FacePositionToGeometry
         return array_map(function(string $line) {
             $coordinates = explode(' ', $line, 4);
 
-            return new Rectangle(
+            return new TwoPointsRectangle(
                 new Point($coordinates[0], $coordinates[1]),
                 new Point($coordinates[0] + $coordinates[2], $coordinates[1] + $coordinates[3])
             );

@@ -53,35 +53,11 @@ class ImageHandler
     }
 
     /**
-     * @return ImageProcessor
-     */
-    public function imageProcessor(): ImageProcessor
-    {
-        return $this->imageProcessor;
-    }
-
-    /**
-     * @return AppParameters
-     */
-    public function appParameters(): AppParameters
-    {
-        return $this->appParameters;
-    }
-
-    /**
-     * @return SecurityHandler
-     */
-    public function securityHandler(): SecurityHandler
-    {
-        return $this->securityHandler;
-    }
-
-
-    /**
      * @param string $options
      * @param string $imageSrc
      *
      * @return OutputImage
+     *
      * @throws \Exception
      */
     public function processImage(string $options, string $imageSrc): OutputImage

@@ -89,7 +89,12 @@ $app['resolver'] = function (\Silex\Application $app) {
 $app['image.handler'] = function (\Silex\Application $app) {
     return new \Core\Handler\ImageHandler(
         $app['flysystems']['upload_dir'],
-        $app['params']
+        $app['params']->buildSecurityRule(),
+        $app['params']->parameterByKey('security_key'),
+        $app['params']->parameterByKey('security_iv'),
+        $app['params']->parameterByKey('default_options'),
+        $app['params']->parameterByKey('options_keys'),
+        $app['params']->parameterByKey('options_separator')
     );
 };
 

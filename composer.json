@@ -1,54 +1,104 @@
 {
-  "name": "flyimg/flyimg",
-  "description": "Server image resizing and cropping on the fly base on ImageMagick+MozJPEG",
-  "type": "project",
-  "keywords": [
-    "image",
-    "resize",
-    "crop",
-    "imageMagick",
-    "flysystem",
-    "mozjpeg"
-  ],
-  "homepage": "https://github.com/flyimg/flyimg",
-  "license": "MIT",
-  "authors": [
-    {
-      "name": "Sadok Ferjani",
-      "email": "sadoknet@gmail.com",
-      "homepage": "http://sadokferjani.me",
-      "role": "Developer"
+    "name": "flyimg/flyimg",
+    "description": "Server image resizing and cropping on the fly base on ImageMagick+MozJPEG",
+    "type": "project",
+    "keywords": [
+        "image",
+        "resize",
+        "crop",
+        "imageMagick",
+        "flysystem",
+        "mozjpeg"
+    ],
+    "homepage": "https://github.com/flyimg/flyimg",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sadok Ferjani",
+            "email": "sadoknet@gmail.com",
+            "homepage": "http://sadokferjani.me",
+            "role": "Developer"
+        },
+        {
+            "name": "Agustín Amenabar",
+            "email": "baamenabar@gmail.com",
+            "homepage": "http://code.medula.cl",
+            "role": "Developer"
+        },
+        {
+            "name": "Grégory Planchat",
+            "email": "gregory@kiboko.fr",
+            "homepage": "http://kiboko.fr",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=7.2",
+        "ext-ctype": "*",
+        "ext-iconv": "*",
+        "league/flysystem": "^1.0",
+        "league/flysystem-aws-s3-v3": "^1.0",
+        "league/flysystem-cached-adapter": "^1.0",
+        "symfony/console": "*",
+        "symfony/dotenv": "*",
+        "symfony/flex": "^1.1",
+        "symfony/framework-bundle": "*",
+        "symfony/process": "*",
+        "symfony/twig-bundle": "*",
+        "symfony/yaml": "*"
     },
-    {
-      "name": "Agustín Amenabar",
-      "email": "baamenabar@gmail.com",
-      "homepage": "http://code.medula.cl",
-      "role": "Developer"
+    "require-dev": {
+        "codeclimate/php-test-reporter": "dev-master",
+        "escapestudios/symfony2-coding-standard": "~2.0",
+        "phpunit/phpunit": "5.*",
+        "squizlabs/php_codesniffer": "2.*",
+        "symfony/browser-kit": "^3.3",
+        "symfony/web-server-bundle": "*"
+    },
+    "config": {
+        "preferred-install": {
+            "*": "dist"
+        },
+        "sort-packages": true
+    },
+    "autoload": {
+        "psr-4": {
+            "Core\\": "src/Core/",
+            "Flyimg\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Flysystem\\Tests\\": "tests/"
+        }
+    },
+    "replace": {
+        "paragonie/random_compat": "*",
+        "symfony/polyfill-ctype": "*",
+        "symfony/polyfill-iconv": "*",
+        "symfony/polyfill-php71": "*",
+        "symfony/polyfill-php70": "*",
+        "symfony/polyfill-php56": "*"
+    },
+    "scripts": {
+        "auto-scripts": {
+            "cache:clear": "symfony-cmd",
+            "assets:install %PUBLIC_DIR%": "symfony-cmd"
+        },
+        "post-install-cmd": [
+            "@auto-scripts"
+        ],
+        "post-update-cmd": [
+            "@auto-scripts"
+        ]
+    },
+    "conflict": {
+        "symfony/symfony": "*"
+    },
+    "extra": {
+        "symfony": {
+            "allow-contrib": false,
+            "require": "4.1.*"
+        }
     }
-  ],
-  "require": {
-    "php": ">=7.0",
-    "silex/silex": "2.*",
-    "league/flysystem": "^1.0",
-    "wyrihaximus/sli-fly": "^3.0",
-    "league/flysystem-cached-adapter": "^1.0",
-    "league/flysystem-aws-s3-v3": "^1.0"
-  },
-  "require-dev": {
-    "phpunit/phpunit": "5.*",
-    "squizlabs/php_codesniffer": "2.*",
-    "escapestudios/symfony2-coding-standard": "~2.0",
-    "codeclimate/php-test-reporter": "dev-master",
-    "symfony/browser-kit": "^3.3"
-  },
-  "autoload": {
-    "psr-4": {
-      "Core\\": "src\\Core"
-    }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "Tests\\": "tests/"
-    }
-  }
 }

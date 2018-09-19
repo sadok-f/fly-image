@@ -6,8 +6,7 @@ use Core\Exception\InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Class OutputImage
- * @package Core\Entity
+ * @deprecated see \Flyimg\Image\ImageInterface
  */
 class OutputImage
 {
@@ -152,7 +151,7 @@ class OutputImage
         $this->outputImageName = md5(
             implode('.', $hashedOptions->asArray()).$this->inputImage->sourceImageUrl()
         );
-        $this->outputImagePath = TMP_DIR.$this->outputImageName;
+        $this->outputImagePath = sys_get_temp_dir() . $this->outputImageName;
 
         if ($this->inputImage->optionsBag()->get('refresh')) {
             $this->outputImagePath .= uniqid("-", true);

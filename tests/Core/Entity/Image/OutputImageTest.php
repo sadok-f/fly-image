@@ -68,7 +68,7 @@ class OutputImageTest extends BaseTest
         $image = new OutputImage($inputImage);
         $this->generatedImage[] = $image;
 
-        $this->assertFileExists($image->getInputImage()->sourceImagePath());
+        $this->assertFileExists($image->getInputImage()->sourcePath());
     }
 
     /**
@@ -87,8 +87,8 @@ class OutputImageTest extends BaseTest
         $this->generatedImage[] = $image2;
         $this->generatedImage[] = $image;
 
-        $this->assertEquals($image2->getOutputImageName(), $image->getOutputImageName());
-        $this->assertNotEquals($image2->getOutputImagePath(), $image->getOutputImagePath());
+        $this->assertEquals($image2->getOutputName(), $image->getOutputName());
+        $this->assertNotEquals($image2->getPath(), $image->getPath());
     }
 
     /**

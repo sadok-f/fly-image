@@ -2,26 +2,35 @@
 
 namespace Flyimg\Image\Command;
 
-use Flyimg\Image\Geometry\Rectangle;
+use Flyimg\Exception\ExecFailedException;
+use Flyimg\Image\Geometry\PolygonInterface;
 use Flyimg\Image\ImageInterface;
 use Flyimg\Image\LocalImageInterface;
 use Flyimg\Image\TemporaryFileImage;
-use Symfony\Component\Process\Process;
+use Flyimg\Process\ProcessContext;
 
 class CropCommand implements CommandInterface
 {
     /**
-     * @var Rectangle
+     * @var PolygonInterface
      */
     private $dimensions;
 
     /**
-     * @param Rectangle $dimensions
+     * @var ProcessContext|null
+     */
+    private $context;
+
+    /**
+     * @param PolygonInterface $dimensions
+     * @param ProcessContext   $context
      */
     public function __construct(
-        Rectangle $dimensions
+        PolygonInterface $dimensions,
+        ProcessContext $context
     ) {
         $this->dimensions = $dimensions;
+        $this->context = $context;
     }
 
     public function execute(ImageInterface $input): ImageInterface
@@ -31,27 +40,35 @@ class CropCommand implements CommandInterface
             $input = TemporaryFileImage::fromFile($input);
         }
 
-        $process = new Process([
+        $process = $this->context->pipe(
             '/usr/bin/convert',
             '-crop', self::normalizeGeometry($this->dimensions),
             '-write', $output->getPath(),
-            $input->path(),
-        ]);
+            $input->path()
+        )->build();
 
         $process->run();
+        if (!$process->isSuccessful()) {
+            throw new ExecFailedException(strtr(
+                'The blur command did not run properly, message was: %message%.',
+                [
+                    '%message%' => $process->getErrorOutput(),
+                ]
+            ));
+        }
 
         return $output;
     }
 
-    private static function normalizeGeometry(Rectangle $dimensions): string
+    private static function normalizeGeometry(PolygonInterface $dimensions): string
     {
         return strtr(
             '%width%x%height%+%abscissa%+%ordinate%',
             [
                 '%width%' => $dimensions->width(),
                 '%height%' => $dimensions->height(),
-                '%abscissa%' => $dimensions->topLeft->x,
-                '%ordinate%' => $dimensions->topLeft->y,
+                '%abscissa%' => $dimensions->topLeft()->x,
+                '%ordinate%' => $dimensions->topLeft()->y,
             ]
         );
     }
