@@ -4,6 +4,7 @@ namespace Flyimg\Image\Command;
 
 use Flyimg\Image\Geometry\Rectangle;
 use Flyimg\Image\ImageInterface;
+use Flyimg\Image\LocalImageInterface;
 use Flyimg\Image\TemporaryFileImage;
 use Symfony\Component\Process\Process;
 
@@ -26,12 +27,15 @@ class CropCommand implements CommandInterface
     public function execute(ImageInterface $input): ImageInterface
     {
         $output = TemporaryFileImage::fromFile($input);
+        if (!$input instanceof LocalImageInterface) {
+            $input = TemporaryFileImage::fromFile($input);
+        }
 
         $process = new Process([
             '/usr/bin/convert',
             '-crop', self::normalizeGeometry($this->dimensions),
             '-write', $output->getPath(),
-            $input->sourcePath(),
+            $input->path(),
         ]);
 
         $process->run();

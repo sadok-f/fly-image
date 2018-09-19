@@ -3,6 +3,7 @@
 namespace Flyimg\Image\Command;
 
 use Flyimg\Image\ImageInterface;
+use Flyimg\Image\LocalImageInterface;
 use Flyimg\Image\TemporaryFileImage;
 use Symfony\Component\Process\Process;
 
@@ -33,12 +34,15 @@ class ResizeCommand implements CommandInterface
     public function execute(ImageInterface $input): ImageInterface
     {
         $output = TemporaryFileImage::fromFile($input);
+        if (!$input instanceof LocalImageInterface) {
+            $input = TemporaryFileImage::fromFile($input);
+        }
 
         $process = new Process([
             '/usr/bin/convert',
             '-crop', self::normalizeSize($this->width, $this->height),
-            '-write', $output->getPath(),
-            $input->sourcePath(),
+            '-write', $output->path(),
+            $input->path(),
         ]);
 
         $process->run();

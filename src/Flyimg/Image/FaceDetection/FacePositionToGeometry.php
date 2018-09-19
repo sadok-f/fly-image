@@ -5,7 +5,6 @@ namespace Flyimg\Image\Processor\FaceDetection;
 use Flyimg\Image\Geometry\Point;
 use Flyimg\Image\Geometry\Rectangle;
 use Flyimg\Image\ImageInterface;
-use Flyimg\Image\InputImageInterface;
 use Flyimg\Image\LocalImageInterface;
 use Flyimg\Image\TemporaryFileImage;
 use Symfony\Component\Process\Process;
