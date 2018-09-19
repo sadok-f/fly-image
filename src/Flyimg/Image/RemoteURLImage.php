@@ -4,8 +4,13 @@ namespace Flyimg\Image;
 
 use League\Flysystem\File;
 
-final class RemoteImage implements ImageInterface
+final class RemoteURLImage implements RemoteImageInterface
 {
+    /**
+     * @var string
+     */
+    private $url;
+
     /**
      * @var resource
      */
@@ -13,7 +18,13 @@ final class RemoteImage implements ImageInterface
 
     public function __construct(string $url)
     {
+        $this->url = $url;
         $this->stream = fopen($url, 'r');
+    }
+
+    public function url(): string
+    {
+        return $this->url;
     }
 
     public function file(): ?File

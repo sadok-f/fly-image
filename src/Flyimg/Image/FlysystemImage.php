@@ -5,7 +5,7 @@ namespace Flyimg\Image;
 use League\Flysystem\File;
 use League\Flysystem\FilesystemInterface;
 
-final class FileImage implements ImageInterface
+final class FlysystemImage implements ImageInterface
 {
     /**
      * @var File
