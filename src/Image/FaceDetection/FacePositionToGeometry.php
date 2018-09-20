@@ -2,15 +2,13 @@
 
 namespace Flyimg\Image\FaceDetection;
 
-use Flyimg\Image\Geometry\Point;
-use Flyimg\Image\Geometry\PolygonInterface;
-use Flyimg\Image\Geometry\TwoPointsRectangle;
-use Flyimg\Image\ImageInterface;
-use Flyimg\Image\LocalImageInterface;
-use Flyimg\Image\TemporaryFileImage;
+use Flyimg\Image\ShortLivedStreamedFile;
+use Imagine\Image\Box;
+use Imagine\Image\ImageInterface;
+use Imagine\Image\Point;
 use Symfony\Component\Process\Process;
 
-class FacePositionToGeometry
+class FacePositionToGeometry implements FaceDetectionInterface
 {
     /**
      * @var string
@@ -29,28 +27,34 @@ class FacePositionToGeometry
     /**
      * @param ImageInterface $input
      *
-     * @return PolygonInterface[]
+     * @return \Generator|array<PointInterface => BoxInterface>
      */
-    public function detect(ImageInterface $input): array
+    public function detect(ImageInterface $input): \Generator
     {
-        if (!$input instanceof LocalImageInterface) {
-            $input = TemporaryFileImage::fromFile($input);
+        $path = $input->metadata()['filepath'];
+        $needCleanup = false;
+        if (empty($path)) {
+            $path = sys_get_temp_dir() . '/flyimg.' . uniqid() . '.jpeg';
+            $input->copy()->save($path);
+            $needCleanup = true;
         }
 
-        $process = new Process([
-            $this->command,
-            $input->path()
-        ]);
+        $process = new Process([$this->command, $path]);
 
         $process->run();
 
-        return array_map(function(string $line) {
+        foreach (explode(PHP_EOL, $process->getOutput()) as $line) {
+            if (empty($line)) {
+                continue;
+            }
+
             $coordinates = explode(' ', $line, 4);
 
-            return new TwoPointsRectangle(
-                new Point($coordinates[0], $coordinates[1]),
-                new Point($coordinates[0] + $coordinates[2], $coordinates[1] + $coordinates[3])
-            );
-        }, explode(PHP_EOL, $process->getOutput()));
+            yield new Point($coordinates[0], $coordinates[1]) => new Box($coordinates[2], $coordinates[3]);
+        }
+
+        if ($needCleanup) {
+            unlink($path);
+        }
     }
 }

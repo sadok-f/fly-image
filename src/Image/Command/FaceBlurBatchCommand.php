@@ -3,40 +3,48 @@
 namespace Flyimg\Image\Command;
 
 use Flyimg\Image\CommandChain;
-use Flyimg\Image\ImageInterface;
-use Flyimg\Image\FaceDetection\FacePositionToGeometry;
-use Flyimg\Process\ProcessContext;
+use Flyimg\Image\FaceDetection\FaceDetectionInterface;
+use Imagine\Image\BoxInterface;
+use Imagine\Image\ImageInterface;
+use Imagine\Image\ImagineInterface;
+use Imagine\Image\PointInterface;
 
 class FaceBlurBatchCommand implements CommandInterface
 {
     /**
-     * @var FacePositionToGeometry
+     * @var ImagineInterface
+     */
+    private $imagine;
+
+    /**
+     * @var FaceDetectionInterface
      */
     private $faceDetector;
 
     /**
-     * @var ProcessContext|null
-     */
-    private $context;
-
-    /**
-     * @param FacePositionToGeometry $faceDetector
-     * @param ProcessContext   $context
+     * @param ImagineInterface       $imagine
+     * @param FaceDetectionInterface $faceDetector
      */
     public function __construct(
-        FacePositionToGeometry $faceDetector,
-        ProcessContext $context
+        ImagineInterface $imagine,
+        FaceDetectionInterface $faceDetector
     ) {
+        $this->imagine = $imagine;
         $this->faceDetector = $faceDetector;
-        $this->context = $context;
     }
 
     public function execute(ImageInterface $input): ImageInterface
     {
         $executor = new CommandChain();
 
-        foreach ($this->faceDetector->detect($input) as $rectangle) {
-            $executor->add(new BlurCommand($rectangle, $this->context));
+        /**
+         * @var PointInterface $point
+         * @var BoxInterface $box
+         */
+        foreach ($this->faceDetector->detect($input) as $point => $box) {
+            $executor->add(
+                new BlurCommand($this->imagine, $point, $box)
+            );
         }
 
         return $executor->execute($input);

@@ -3,6 +3,7 @@
 namespace Flyimg\Image;
 
 use Flyimg\Image\Command\CommandInterface;
+use Imagine\Image\ImageInterface;
 
 final class CommandChain implements CommandInterface
 {

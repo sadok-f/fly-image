@@ -2,7 +2,7 @@
 
 namespace Flyimg\Image\Command;
 
-use Flyimg\Image\ImageInterface;
+use Imagine\Image\ImageInterface;
 
 interface CommandInterface
 {

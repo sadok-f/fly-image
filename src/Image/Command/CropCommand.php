@@ -2,74 +2,45 @@
 
 namespace Flyimg\Image\Command;
 
-use Flyimg\Exception\ExecFailedException;
-use Flyimg\Image\Geometry\PolygonInterface;
-use Flyimg\Image\ImageInterface;
-use Flyimg\Image\LocalImageInterface;
-use Flyimg\Image\TemporaryFileImage;
-use Flyimg\Process\ProcessContext;
+use Imagine\Image\BoxInterface;
+use Imagine\Image\ImageInterface;
+use Imagine\Image\ImagineInterface;
+use Imagine\Image\PointInterface;
 
 class CropCommand implements CommandInterface
 {
     /**
-     * @var PolygonInterface
+     * @var ImagineInterface
      */
-    private $dimensions;
+    private $imagine;
 
     /**
-     * @var ProcessContext|null
+     * @var PointInterface
      */
-    private $context;
+    private $start;
 
     /**
-     * @param PolygonInterface $dimensions
-     * @param ProcessContext   $context
+     * @var BoxInterface
+     */
+    private $box;
+
+    /**
+     * @param ImagineInterface $imagine
+     * @param BoxInterface     $box
+     * @param PointInterface   $start
      */
     public function __construct(
-        PolygonInterface $dimensions,
-        ProcessContext $context
+        ImagineInterface $imagine,
+        PointInterface $start,
+        BoxInterface $box
     ) {
-        $this->dimensions = $dimensions;
-        $this->context = $context;
+        $this->imagine = $imagine;
+        $this->box = $box;
+        $this->start = $start;
     }
 
     public function execute(ImageInterface $input): ImageInterface
     {
-        $output = TemporaryFileImage::fromFile($input);
-        if (!$input instanceof LocalImageInterface) {
-            $input = TemporaryFileImage::fromFile($input);
-        }
-
-        $process = $this->context->pipe(
-            '/usr/bin/convert',
-            '-crop', self::normalizeGeometry($this->dimensions),
-            '-write', $output->getPath(),
-            $input->path()
-        )->build();
-
-        $process->run();
-        if (!$process->isSuccessful()) {
-            throw new ExecFailedException(strtr(
-                'The blur command did not run properly, message was: %message%.',
-                [
-                    '%message%' => $process->getErrorOutput(),
-                ]
-            ));
-        }
-
-        return $output;
-    }
-
-    private static function normalizeGeometry(PolygonInterface $dimensions): string
-    {
-        return strtr(
-            '%width%x%height%+%abscissa%+%ordinate%',
-            [
-                '%width%' => $dimensions->width(),
-                '%height%' => $dimensions->height(),
-                '%abscissa%' => $dimensions->topLeft()->x,
-                '%ordinate%' => $dimensions->topLeft()->y,
-            ]
-        );
+        return $input->crop($this->start, $this->box);
     }
 }
