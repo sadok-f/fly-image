@@ -7,11 +7,8 @@ use Flyimg\Image\Command\FaceBlurBatchCommand;
 use Flyimg\Image\Command\PixelateCommand;
 use Flyimg\Image\CommandChain;
 use Flyimg\Image\FaceDetection\FacePositionToGeometry;
-use Flyimg\Image\Geometry\Point;
-use Flyimg\Image\Geometry\PositionedRectangle;
-use Flyimg\Image\RemoteURLImage;
-use Flyimg\Process\ProcessContext;
 use Imagine\Image\Box;
+use Imagine\Image\Point;
 use Imagine\Imagick\Imagine;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
@@ -41,12 +38,12 @@ class DownloadCommand extends ContainerAwareCommand
         $chain = new CommandChain(
             new PixelateCommand(
                 $imagine,
-                new \Imagine\Image\Point(50, 50),
+                new Point(50, 50),
                 new Box(250, 250)
             ),
             new BlurCommand(
                 $imagine,
-                new \Imagine\Image\Point(350, 50),
+                new Point(350, 50),
                 new Box(250, 250)
             ),
             new FaceBlurBatchCommand(

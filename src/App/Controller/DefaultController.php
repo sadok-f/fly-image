@@ -2,16 +2,12 @@
 
 namespace Flyimg\App\Controller;
 
-use Flyimg\Image\Command\BlurCommand;
+use Flyimg\Image\Command\FaceBlurBatchCommand;
 use Flyimg\Image\CommandChain;
-use Flyimg\Image\Geometry\Point;
-use Flyimg\Image\Geometry\PositionedRectangle;
-use Flyimg\Image\RemoteURLImage;
-use Flyimg\Image\TemporaryStreamImage;
-use Flyimg\Process\ProcessContext;
+use Flyimg\Image\FaceDetection\FacePositionToGeometry;
+use Imagine\Imagick\Imagine;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class DefaultController extends Controller
 {
@@ -31,24 +27,19 @@ class DefaultController extends Controller
      */
     public function uploadAction(string $options, string $imageSrc = null): Response
     {
+        $imagine = new Imagine();
         $chain = new CommandChain(
-            new BlurCommand(
-                new PositionedRectangle(new Point(0, 0), 200, 200),
-                new ProcessContext('docker-compose', 'exec', 'flyimg')
+            new FaceBlurBatchCommand(
+                $imagine,
+                new FacePositionToGeometry()
             )
         );
 
-        $source = new RemoteURLImage($imageSrc);
+        $source = $imagine->open($imageSrc);
 
         $source = $chain->execute($source);
 
-        return new StreamedResponse(function() use($source) {
-            $out = fopen('php://output', 'wb');
-
-            stream_copy_to_stream($source->asStream(), $out);
-
-            fclose($out);
-        }, 200, [
+        return new Response($source->get($source->metadata()['format']), 200, [
             'Content-Type' => 'image/png',
         ]);
     }

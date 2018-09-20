@@ -2,6 +2,7 @@
 
 namespace Flyimg\Process;
 
+use Flyimg\Image\StreamedImageInterface;
 use Symfony\Component\Process\Process;
 
 class ProcessContext
@@ -38,6 +39,11 @@ class ProcessContext
         return $instance;
     }
 
+    public function command(): string
+    {
+        return implode(' ', $this->pack());
+    }
+
     /**
      * @return string[]
      */
@@ -53,9 +59,14 @@ class ProcessContext
         );
     }
 
-    public function build(): Process
+    public function build(?StreamedImageInterface $input = null): Process
     {
-        var_dump(implode(' ', array_map(function($item){return escapeshellarg($item);}, $this->pack())));die;
-        return new Process($this->pack());
+        $process = new Process($this->pack());
+
+        if ($input !== null) {
+            $process->setInput($input->asStream());
+        }
+
+        return $process;
     }
 }
