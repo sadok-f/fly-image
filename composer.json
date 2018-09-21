@@ -46,11 +46,13 @@
         "symfony/framework-bundle": "*",
         "symfony/process": "*",
         "symfony/twig-bundle": "*",
+        "symfony/validator": "*",
         "symfony/yaml": "*"
     },
     "require-dev": {
         "codeclimate/php-test-reporter": "dev-master",
         "escapestudios/symfony2-coding-standard": "~2.0",
+        "phpspec/phpspec": "^5.0",
         "phpunit/phpunit": "5.*",
         "squizlabs/php_codesniffer": "2.*",
         "symfony/browser-kit": "^3.3",

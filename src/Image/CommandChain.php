@@ -4,8 +4,9 @@ namespace Flyimg\Image;
 
 use Flyimg\Image\Command\CommandInterface;
 use Imagine\Image\ImageInterface;
+use Traversable;
 
-final class CommandChain implements CommandInterface
+final class CommandChain implements CommandInterface, \Countable, \IteratorAggregate
 {
     /**
      * @var CommandInterface[]
@@ -29,5 +30,15 @@ final class CommandChain implements CommandInterface
         }
 
         return $image;
+    }
+
+    public function count()
+    {
+        return count($this->commands);
+    }
+
+    public function getIterator()
+    {
+        return new \ArrayIterator($this->commands);
     }
 }

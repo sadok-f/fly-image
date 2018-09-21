@@ -2,10 +2,8 @@
 
 namespace Flyimg\App\Controller;
 
-use Flyimg\Image\Command\FaceDetectBatchCommand;
-use Flyimg\Image\Command\FacePixelateBatchCommand;
-use Flyimg\Image\CommandChain;
-use Flyimg\Image\FaceDetection\FacedetectShell;
+use Flyimg\Http\OptionResolver\PathResolver;
+use Flyimg\Image\Command\Factory as CommandFactory;
 use Imagine\Imagick\Imagine;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,22 +27,16 @@ class DefaultController extends Controller
     public function uploadAction(string $options, string $imageSrc = null): Response
     {
         $imagine = new Imagine();
-        $chain = new CommandChain(
-            new FaceDetectBatchCommand(
-                $imagine,
-                new FacedetectShell(),
-                10
-            )/*,
-            new FacePixelateBatchCommand(
-                $imagine,
-                new Facedetect(),
-                10
-            )*/
+        $resolver = new PathResolver(
+            [
+                'w' => new CommandFactory\ResizeByWidthFactory($imagine),
+                'h' => new CommandFactory\ResizeByHeightFactory($imagine),
+            ]
         );
 
         $source = $imagine->open($imageSrc);
 
-        $source = $chain->execute($source);
+        $source = $resolver->resolve($options)->execute($source);
 
         return new Response($source->get($source->metadata()['format']), 200, [
             'Content-Type' => 'image/png',
