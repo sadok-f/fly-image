@@ -34,10 +34,10 @@ class ResizeByHeightCommand implements CommandInterface
     {
         $currentSize = $input->getSize();
         $box = new Box(
-            $currentSize->getWidth() * ($currentSize->getHeight() / $this->height),
+            $currentSize->getWidth() * ($this->height / $currentSize->getHeight()),
             $this->height
         );
 
-        return $input->thumbnail($box, ImageInterface::THUMBNAIL_INSET);
+        return $input->resize($box);
     }
 }

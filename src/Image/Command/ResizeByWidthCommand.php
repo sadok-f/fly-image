@@ -35,9 +35,9 @@ class ResizeByWidthCommand implements CommandInterface
         $currentSize = $input->getSize();
         $box = new Box(
             $this->width,
-            $currentSize->getHeight() * ($currentSize->getWidth() / $this->width)
+            $currentSize->getHeight() * ($this->width / $currentSize->getWidth())
         );
 
-        return $input->thumbnail($box, ImageInterface::THUMBNAIL_INSET);
+        return $input->resize($box);
     }
 }
