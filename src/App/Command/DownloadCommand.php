@@ -6,7 +6,7 @@ use Flyimg\Image\Command\BlurCommand;
 use Flyimg\Image\Command\FaceBlurBatchCommand;
 use Flyimg\Image\Command\PixelateCommand;
 use Flyimg\Image\CommandChain;
-use Flyimg\Image\FaceDetection\FacePositionToGeometry;
+use Flyimg\Image\FaceDetection\FacedetectShell;
 use Imagine\Image\Box;
 use Imagine\Image\Point;
 use Imagine\Imagick\Imagine;
@@ -48,7 +48,7 @@ class DownloadCommand extends ContainerAwareCommand
             ),
             new FaceBlurBatchCommand(
                 $imagine,
-                new FacePositionToGeometry()
+                new FacedetectShell()
             )
         );
 

@@ -6,3 +6,6 @@ services:
       context: .
     volumes:
       - .:/var/www/html/:rw
+      - ./.docker/nginx/conf.d/flyimage.conf:/etc/nginx/conf.d/flyimage.conf
+    ports:
+      - 8000:80

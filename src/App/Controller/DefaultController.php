@@ -2,9 +2,10 @@
 
 namespace Flyimg\App\Controller;
 
-use Flyimg\Image\Command\FaceBlurBatchCommand;
+use Flyimg\Image\Command\FaceDetectBatchCommand;
+use Flyimg\Image\Command\FacePixelateBatchCommand;
 use Flyimg\Image\CommandChain;
-use Flyimg\Image\FaceDetection\FacePositionToGeometry;
+use Flyimg\Image\FaceDetection\FacedetectShell;
 use Imagine\Imagick\Imagine;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,10 +30,16 @@ class DefaultController extends Controller
     {
         $imagine = new Imagine();
         $chain = new CommandChain(
-            new FaceBlurBatchCommand(
+            new FaceDetectBatchCommand(
                 $imagine,
-                new FacePositionToGeometry()
-            )
+                new FacedetectShell(),
+                10
+            )/*,
+            new FacePixelateBatchCommand(
+                $imagine,
+                new Facedetect(),
+                10
+            )*/
         );
 
         $source = $imagine->open($imageSrc);
