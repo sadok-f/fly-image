@@ -41,10 +41,8 @@ class PathResolver implements OptionResolverInterface
 
     public function resolve(string $rawOptions): CommandChain
     {
-        $options = iterator_to_array(
-            $this->walkOptionStrings(
-                explode($this->optionSeparator, $rawOptions)
-            )
+        $options = $this->walkOptionStrings(
+            explode($this->optionSeparator, $rawOptions)
         );
 
         $chain = new CommandChain();
