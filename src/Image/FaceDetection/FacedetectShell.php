@@ -8,7 +8,7 @@ use Imagine\Image\ImageInterface;
 use Imagine\Image\Point;
 use Symfony\Component\Process\Process;
 
-class FacePositionToGeometry implements FaceDetectionInterface
+class FacedetectShell implements FaceDetectionInterface
 {
     /**
      * @var string
@@ -50,7 +50,7 @@ class FacePositionToGeometry implements FaceDetectionInterface
 
             $coordinates = explode(' ', $line, 4);
 
-            yield new Point($coordinates[0], $coordinates[1]) => new Box($coordinates[2], $coordinates[3]);
+            yield [new Point($coordinates[0], $coordinates[1]), new Box($coordinates[2], $coordinates[3])];
         }
 
         if ($needCleanup) {

@@ -7,9 +7,11 @@ use Flyimg\Image\FaceDetection\FaceDetectionInterface;
 use Imagine\Image\BoxInterface;
 use Imagine\Image\ImageInterface;
 use Imagine\Image\ImagineInterface;
+use Imagine\Image\Palette\Color\RGB as RGBColor;
+use Imagine\Image\Palette\RGB as RGBPalette;
 use Imagine\Image\PointInterface;
 
-class FaceBlurBatchCommand implements CommandInterface
+class FaceDetectBatchCommand implements CommandInterface
 {
     /**
      * @var ImagineInterface
@@ -22,15 +24,23 @@ class FaceBlurBatchCommand implements CommandInterface
     private $faceDetector;
 
     /**
+     * @var int
+     */
+    private $thickness;
+
+    /**
      * @param ImagineInterface       $imagine
      * @param FaceDetectionInterface $faceDetector
+     * @param int                    $thickness
      */
     public function __construct(
         ImagineInterface $imagine,
-        FaceDetectionInterface $faceDetector
+        FaceDetectionInterface $faceDetector,
+        int $thickness = 10
     ) {
         $this->imagine = $imagine;
         $this->faceDetector = $faceDetector;
+        $this->thickness = $thickness;
     }
 
     public function execute(ImageInterface $input): ImageInterface
@@ -43,7 +53,13 @@ class FaceBlurBatchCommand implements CommandInterface
          */
         foreach ($this->faceDetector->detect($input) as [$point, $box]) {
             $executor->add(
-                new BlurCommand($this->imagine, $point, $box)
+                new DrawSqareCommand(
+                    $this->imagine,
+                    $point,
+                    $box,
+                    new RGBColor(new RGBPalette(), [255, 127, 0], 50),
+                    $this->thickness
+                )
             );
         }
 

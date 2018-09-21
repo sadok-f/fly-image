@@ -9,7 +9,7 @@ use Imagine\Image\ImageInterface;
 use Imagine\Image\ImagineInterface;
 use Imagine\Image\PointInterface;
 
-class FaceBlurBatchCommand implements CommandInterface
+class FacePixelateBatchCommand implements CommandInterface
 {
     /**
      * @var ImagineInterface
@@ -22,15 +22,23 @@ class FaceBlurBatchCommand implements CommandInterface
     private $faceDetector;
 
     /**
+     * @var int
+     */
+    private $dimension;
+
+    /**
      * @param ImagineInterface       $imagine
      * @param FaceDetectionInterface $faceDetector
+     * @param int                    $dimension
      */
     public function __construct(
         ImagineInterface $imagine,
-        FaceDetectionInterface $faceDetector
+        FaceDetectionInterface $faceDetector,
+        int $dimension = 10
     ) {
         $this->imagine = $imagine;
         $this->faceDetector = $faceDetector;
+        $this->dimension = $dimension;
     }
 
     public function execute(ImageInterface $input): ImageInterface
@@ -43,7 +51,7 @@ class FaceBlurBatchCommand implements CommandInterface
          */
         foreach ($this->faceDetector->detect($input) as [$point, $box]) {
             $executor->add(
-                new BlurCommand($this->imagine, $point, $box)
+                new PixelateCommand($this->imagine, $point, $box, $this->dimension)
             );
         }
 

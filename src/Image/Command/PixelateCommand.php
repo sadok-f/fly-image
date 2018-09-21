@@ -39,7 +39,7 @@ class PixelateCommand implements CommandInterface
      * @param BoxInterface     $box
      * @param PointInterface   $start
      * @param ImagineInterface $imagine
-     * @param int $dimension
+     * @param int              $dimension
      */
     public function __construct(
         ImagineInterface $imagine,
