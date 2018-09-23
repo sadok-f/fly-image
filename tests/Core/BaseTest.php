@@ -2,11 +2,13 @@
 
 namespace Tests\Core;
 
+use Core\Entity\AppParameters;
 use Core\Entity\Image\OutputImage;
 use Core\Handler\ImageHandler;
-use Silex\Application;
+use League\Flysystem\Filesystem;
+use PHPUnit\Framework\TestCase;
 
-class BaseTest extends \PHPUnit_Framework_TestCase
+class BaseTest extends TestCase
 {
     const JPG_TEST_IMAGE = __DIR__.'/../testImages/square.jpg';
     const PNG_TEST_IMAGE = __DIR__.'/../testImages/square.png';
@@ -25,14 +27,9 @@ class BaseTest extends \PHPUnit_Framework_TestCase
     const GIF_OPTION_URL = 'w_100,h_100,rf_1';
 
     /**
-     * @var Application
-     */
-    protected $app = null;
-
-    /**
      * @var ImageHandler
      */
-    protected $ImageHandler = null;
+    protected $imageHandler = null;
 
     /**
      * @var array
@@ -44,8 +41,10 @@ class BaseTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->app = $this->createApplication();
-        $this->ImageHandler = $this->app['image.handler'];
+        $this->imageHandler = new ImageHandler(
+            $this->getMockBuilder(Filesystem::class)->getMock(),
+            $this->getMockBuilder(AppParameters::class)->getMock()
+        );
     }
 
     /**
@@ -53,8 +52,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        unset($this->ImageHandler);
-        unset($this->app);
+        unset($this->imageHandler);
 
         foreach ($this->generatedImage as $image) {
             if ($image instanceof OutputImage) {
@@ -64,25 +62,5 @@ class BaseTest extends \PHPUnit_Framework_TestCase
                 $image->getInputImage()->removeFile();
             }
         }
-    }
-
-
-    /**
-     * @return Application
-     */
-    public function createApplication()
-    {
-        $app = require __DIR__.'/../../app.php';
-        $app['debug'] = true;
-        unset($app['exception_handler']);
-
-        return $app;
-    }
-
-    /**
-     */
-    public function testApplicationInstance()
-    {
-        $this->assertInstanceOf('Silex\Application', $this->app);
     }
 }

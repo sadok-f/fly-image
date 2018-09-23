@@ -28,7 +28,7 @@ class ImageProcessorTest extends BaseTest
     public function setUp()
     {
         parent::setUp();
-        $this->imageProcessor = $this->ImageHandler->imageProcessor();
+        $this->imageProcessor = $this->imageHandler->imageProcessor();
     }
 
     /**
@@ -40,7 +40,7 @@ class ImageProcessorTest extends BaseTest
      */
     public function testShrinkSuccess(string $options, string $expectedSize, string $sourceImage)
     {
-        $image = $this->ImageHandler->processImage($options, $sourceImage);
+        $image = $this->imageHandler->processImage($options, $sourceImage);
         $this->generatedImage[] = $image;
         $this->assertFileExists($image->getPath());
         $imageDimensions = $this->imageInfo($image->getPath())[ImageMetaInfo::IMAGE_PROP_DIMENSIONS];
@@ -56,7 +56,7 @@ class ImageProcessorTest extends BaseTest
      */
     public function testExpandSuccess(string $options, string $expectedSize, string $sourceImage)
     {
-        $image = $this->ImageHandler->processImage($options, $sourceImage);
+        $image = $this->imageHandler->processImage($options, $sourceImage);
         $this->generatedImage[] = $image;
         $this->assertFileExists($image->getPath());
         $imageDimensions = $this->imageInfo($image->getPath())['dimensions'];

@@ -8,10 +8,13 @@
          processIsolation="true"
          stopOnFailure="false"
          syntaxCheck="true"
+         bootstrap="vendor/autoload.php"
 >
     <php>
+        <env name="KERNEL_CLASS" value="Flyimg\App\Kernel"/>
         <env name="HOSTNAME_URL" value=""/>
-        <env name="env" value="test" />
+        <env name="APP_ENV" value="test" />
+        <env name="APP_DEBUG" value="false" />
     </php>
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
@@ -19,8 +22,11 @@
         </whitelist>
     </filter>
     <testsuites>
-        <testsuite name="Flyimg Test Suite">
+        <testsuite name="Flyimg Legacy Test Suite">
             <directory suffix=".php">./tests/</directory>
+        </testsuite>
+        <testsuite name="Flyimg Functional Test Suite">
+            <directory suffix=".php">./tests/Functional</directory>
         </testsuite>
     </testsuites>
 </phpunit>

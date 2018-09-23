@@ -4,14 +4,17 @@ namespace Flyimg\Image\Command\Factory;
 
 use Flyimg\Image\Command\CommandFactoryInterface;
 use Flyimg\Image\Command\CommandInterface;
-use Flyimg\Image\Command\ResizeByHeightCommand;
+use Flyimg\Image\Command\CropCommand;
+use Flyimg\Image\Command\PixelateCommand;
+use Imagine\Image\Box;
 use Imagine\Image\ImagineInterface;
+use Imagine\Image\Point;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class ResizeByHeightFactory implements CommandFactoryInterface
+class PixelateFactory implements CommandFactoryInterface
 {
     /**
      * @var ImagineInterface
@@ -41,7 +44,23 @@ class ResizeByHeightFactory implements CommandFactoryInterface
             new Assert\All([
                 new Assert\Type('int'),
                 new Assert\GreaterThanOrEqual(1)
-            ])
+            ]),
+            new Assert\All([
+                new Assert\Type('int'),
+                new Assert\GreaterThanOrEqual(1)
+            ]),
+            new Assert\All([
+                new Assert\Type('int'),
+                new Assert\GreaterThanOrEqual(1)
+            ]),
+            new Assert\All([
+                new Assert\Type('int'),
+                new Assert\GreaterThanOrEqual(1)
+            ]),
+            new Assert\All([
+                new Assert\Type('int'),
+                new Assert\GreaterThanOrEqual(1)
+            ]),
         ];
     }
 
@@ -53,11 +72,13 @@ class ResizeByHeightFactory implements CommandFactoryInterface
             );
         }
 
-        return new ResizeByHeightCommand($this->imagine, ...$this->toCommandArguments(...$options));
+        return new PixelateCommand($this->imagine, ...$this->toCommandArguments(...$options));
     }
 
-    private function toCommandArguments(int $height): \Generator
+    private function toCommandArguments(int $x, int $y, int $width, int $height, int $dimension): \Generator
     {
-        yield $height;
+        yield new Point($x, $y);
+        yield new Box($width, $height);
+        yield $dimension;
     }
 }

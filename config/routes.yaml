@@ -2,13 +2,26 @@ home:
    path : /
    defaults: { _controller: 'Flyimg\App\Controller\DefaultController::indexAction' }
 
-upload:
+default_expression_upload:
    path : /upload/{options}/{imageSrc}
-   defaults: { _controller: 'Flyimg\App\Controller\DefaultController::uploadAction', imageSrc: '' }
+   defaults: { _controller: 'Flyimg\App\Controller\PathExpressionController::uploadAction', imageSrc: '' }
    requirements:
       imageSrc: .+
-path:
+
+default_expression_path:
    path : /path/{options}/{imageSrc}
-   defaults: { _controller: 'Flyimg\App\Controller\DefaultController::pathAction', imageSrc: '' }
+   defaults: { _controller: 'Flyimg\App\Controller\PathExpressionController::pathAction', imageSrc: '' }
+   requirements:
+      imageSrc: .+
+
+filter_expression_upload:
+   path : /f/upload/{options}/{imageSrc}
+   defaults: { _controller: 'Flyimg\App\Controller\FilterExpressionController::uploadAction', imageSrc: '' }
+   requirements:
+      imageSrc: .+
+
+filter_expression_path:
+   path : /f/path/{options}/{imageSrc}
+   defaults: { _controller: 'Flyimg\App\Controller\FilterExpressionController::pathAction', imageSrc: '' }
    requirements:
       imageSrc: .+

@@ -53,6 +53,11 @@ class ResizeByWidthFactory implements CommandFactoryInterface
             );
         }
 
-        return new ResizeByWidthCommand($this->imagine, $options[0]);
+        return new ResizeByWidthCommand($this->imagine, ...$this->toCommandArguments(...$options));
+    }
+
+    private function toCommandArguments(int $width): \Generator
+    {
+        yield $width;
     }
 }

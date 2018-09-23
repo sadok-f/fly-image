@@ -72,7 +72,8 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Flysystem\\Tests\\": "tests/"
+            "Tests\\Core\\": "tests/Core/",
+            "Flyimg\\Tests\\Functional\\": "tests/Functional/"
         }
     },
     "replace": {

@@ -19,7 +19,7 @@ class InputImageTest extends BaseTest
     public function testSaveToTemporaryFileException()
     {
         $this->expectException(ReadFileException::class);
-        $optionsBag = new OptionsBag($this->ImageHandler->appParameters(), 'o_jpg');
+        $optionsBag = new OptionsBag($this->imageHandler->appParameters(), 'o_jpg');
 
         new InputImage($optionsBag, parent::JPG_TEST_IMAGE.'--fail');
     }

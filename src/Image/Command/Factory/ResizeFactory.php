@@ -5,13 +5,15 @@ namespace Flyimg\Image\Command\Factory;
 use Flyimg\Image\Command\CommandFactoryInterface;
 use Flyimg\Image\Command\CommandInterface;
 use Flyimg\Image\Command\ResizeByHeightCommand;
+use Flyimg\Image\Command\ResizeCommand;
+use Imagine\Image\Box;
 use Imagine\Image\ImagineInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class ResizeByHeightFactory implements CommandFactoryInterface
+class ResizeFactory implements CommandFactoryInterface
 {
     /**
      * @var ImagineInterface
@@ -39,8 +41,7 @@ class ResizeByHeightFactory implements CommandFactoryInterface
     {
         return [
             new Assert\All([
-                new Assert\Type('int'),
-                new Assert\GreaterThanOrEqual(1)
+                new Assert\Type(Box::class),
             ])
         ];
     }
@@ -53,11 +54,11 @@ class ResizeByHeightFactory implements CommandFactoryInterface
             );
         }
 
-        return new ResizeByHeightCommand($this->imagine, ...$this->toCommandArguments(...$options));
+        return new ResizeCommand($this->imagine, ...$this->toCommandArguments(...$options));
     }
 
-    private function toCommandArguments(int $height): \Generator
+    private function toCommandArguments(int $width, int $height): \Generator
     {
-        yield $height;
+        yield new Box($width, $height);
     }
 }

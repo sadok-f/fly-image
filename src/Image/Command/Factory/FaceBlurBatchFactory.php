@@ -2,21 +2,25 @@
 
 namespace Flyimg\Image\Command\Factory;
 
-use Flyimg\Image\Command\CommandFactoryInterface;
 use Flyimg\Image\Command\CommandInterface;
-use Flyimg\Image\Command\ResizeByHeightCommand;
+use Flyimg\Image\Command\FaceBlurBatchCommand;
+use Flyimg\Image\FaceDetection\FaceDetectionInterface;
 use Imagine\Image\ImagineInterface;
 use Symfony\Component\Validator\Constraint;
-use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class ResizeByHeightFactory implements CommandFactoryInterface
+class FaceBlurBatchFactory
 {
     /**
      * @var ImagineInterface
      */
     private $imagine;
+
+    /**
+     * @var FaceDetectionInterface
+     */
+    private $faceDetection;
 
     /**
      * @var ValidatorInterface
@@ -25,10 +29,14 @@ class ResizeByHeightFactory implements CommandFactoryInterface
 
     /**
      * @param ImagineInterface $imagine
+     * @param FaceDetectionInterface $faceDetection
      */
-    public function __construct(ImagineInterface $imagine)
-    {
+    public function __construct(
+        ImagineInterface $imagine,
+        FaceDetectionInterface $faceDetection
+    ) {
         $this->imagine = $imagine;
+        $this->faceDetection = $faceDetection;
         $this->validator = Validation::createValidator();
     }
 
@@ -37,12 +45,7 @@ class ResizeByHeightFactory implements CommandFactoryInterface
      */
     private function constraints(): array
     {
-        return [
-            new Assert\All([
-                new Assert\Type('int'),
-                new Assert\GreaterThanOrEqual(1)
-            ])
-        ];
+        return [];
     }
 
     public function build(...$options): CommandInterface
@@ -53,11 +56,6 @@ class ResizeByHeightFactory implements CommandFactoryInterface
             );
         }
 
-        return new ResizeByHeightCommand($this->imagine, ...$this->toCommandArguments(...$options));
-    }
-
-    private function toCommandArguments(int $height): \Generator
-    {
-        yield $height;
+        return new FaceBlurBatchCommand($this->imagine, $this->faceDetection);
     }
 }

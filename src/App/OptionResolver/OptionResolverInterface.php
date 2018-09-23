@@ -1,6 +1,6 @@
 <?php
 
-namespace Flyimg\Http\OptionResolver;
+namespace Flyimg\App\OptionResolver;
 
 use Flyimg\Image\CommandChain;
 

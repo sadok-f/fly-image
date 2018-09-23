@@ -206,7 +206,7 @@ So to get a pretty kitten at 250 pixels wide, with 50% compression, you would wr
 
 
 ## Basic Option details
-You can see the full list of options configurable by URL params, **with examples**, in the [URL-Options document](docs/url-options.md) 
+You can see the full list of options configurable by URL params, **with examples**, in the [URL-Options document](docs/path-expression.md) 
 
 We put a lot of defaults in place to prevent distortion, bad quality, weird cropping and unwanted padding.
 
