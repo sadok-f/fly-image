@@ -47,7 +47,7 @@ class S3StorageProvider implements ServiceProviderInterface
                 'credentials' => ['key' => $s3Params['access_id'], 'secret' => $s3Params['secret_key']],
                 'region' => $s3Params['region'],
                 'version' => 'latest',
-                'endpoint' => sprintf('https://%s.digitaloceanspaces.com', $s3Params['region']),
+                'endpoint' => sprintf('https://%s', $s3Params['region']),
             ]
         );
 
