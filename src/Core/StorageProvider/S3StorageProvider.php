@@ -30,7 +30,7 @@ class S3StorageProvider implements ServiceProviderInterface
 
         $this->registerS3ServiceProvider($app, $s3Params);
         $app['flysystems']['file_path_resolver'] = function () use ($s3Params) {
-            return sprintf('https://s3.%s.amazonaws.com/%s/', $s3Params['region'], $s3Params['bucket_name']).'%s';
+            return sprintf('%s/%s/', $s3Params['region'], $s3Params['bucket_name']).'%s';
         };
     }
 
@@ -47,6 +47,7 @@ class S3StorageProvider implements ServiceProviderInterface
                 'credentials' => ['key' => $s3Params['access_id'], 'secret' => $s3Params['secret_key']],
                 'region' => $s3Params['region'],
                 'version' => 'latest',
+                'endpoint' => 'https://nyc3.digitaloceanspaces.com',
             ]
         );
 
