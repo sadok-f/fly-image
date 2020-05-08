@@ -88,8 +88,11 @@ class InputImage
                 ],
         ];
         $context = stream_context_create($opts);
-
-        if (!$stream = @fopen($this->sourceImageUrl, 'r', false, $context)
+        
+        $parts = pathinfo($this->sourceImageUrl);
+        $sourceUrl = $parts['dirname'] . '/' . rawurlencode($parts['basename]);
+        
+        if (!$stream = @fopen($sourceUrl, 'r', false, $context)
         ) {
             throw  new ReadFileException(
                 'Error occurred while trying to read the file Url : '
