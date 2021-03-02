@@ -41,6 +41,11 @@
     "symfony/browser-kit": "^4.3",
     "ext-imagick": "*"
   },
+  "config": {
+    "optimize-autoloader": true,
+    "preferred-install": "dist",
+    "sort-packages": true
+  },
   "autoload": {
     "psr-4": {
       "Core\\": "src\\Core"
