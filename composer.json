@@ -27,7 +27,7 @@
     }
   ],
   "require": {
-    "php": ">=7.1",
+    "php": ">=7.4",
     "silex/silex": "2.*",
     "league/flysystem": "^1.1",
     "wyrihaximus/sli-fly": "^3.0",
