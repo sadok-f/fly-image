@@ -6,18 +6,12 @@ use Core\Entity\Image\InputImage;
 use Core\Entity\ImageMetaInfo;
 use Core\Exception\ExecFailedException;
 use Tests\Core\BaseTest;
+use PHPUnit\Framework\Attributes\DataProvider;
 
-/**
- * @backupGlobals disabled
- */
+#[BackupGlobals('disabled')]
 class ImageMetaInfoTest extends BaseTest
 {
-    /**
-     * @param string $testImagePath
-     * @param string $expectedMimeType
-     *
-     * @dataProvider mimeTypeDataProvider
-     */
+    #[DataProvider('mimeTypeDataProvider')]
     public function testGetMimeType(string $testImagePath, string $expectedMimeType)
     {
         $image = new ImageMetaInfo($testImagePath);
@@ -49,11 +43,8 @@ class ImageMetaInfoTest extends BaseTest
         $this->assertEquals(InputImage::JPEG_MIME_TYPE, $image->mimeType());
     }
 
-    /**
-     * @param string $testImagePath
-     *
-     * @dataProvider fileInfoProvider
-     */
+   
+    #[DataProvider('fileInfoProvider')]
     public function testGetInfo(string $testImagePath)
     {
         $image = new ImageMetaInfo($testImagePath);
@@ -62,17 +53,7 @@ class ImageMetaInfoTest extends BaseTest
         $this->assertEquals(6, count($imageInfo));
     }
 
-    /**
-     * @param string $testImagePath
-     * @param string $expectedFormat
-     * @param string $expectedCanvas
-     * @param string $expectedBitDepth
-     * @param string $expectedColorProfile
-     * @param string $expectedFileWeight
-     * @param array $expectedDimensions
-     *
-     * @dataProvider fileInfoProvider
-     */
+    #[DataProvider('fileInfoProvider')]
     public function testGetInfoAttributes(
         string $testImagePath,
         string $expectedFormat,
