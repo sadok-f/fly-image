@@ -43,7 +43,6 @@ class ImageMetaInfoTest extends BaseTest
         $this->assertEquals(InputImage::JPEG_MIME_TYPE, $image->mimeType());
     }
 
-   
     #[DataProvider('fileInfoProvider')]
     public function testGetInfo(string $testImagePath)
     {
