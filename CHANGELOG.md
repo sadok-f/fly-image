@@ -1,5 +1,12 @@
 # Flyimg Changelog
 
+## [1.3.5](https://github.com/flyimg/flyimg/compare/1.3.4...1.3.5) (2024-05-09)
+
+
+### Bug Fixes
+
+* update flyimg base version to support multi arch build, fixing [#414](https://github.com/flyimg/flyimg/issues/414) ([74d6336](https://github.com/flyimg/flyimg/commit/74d63362b6788a688c6d62742b783324cb9ec7d4))
+
 ## [1.3.4](https://github.com/flyimg/flyimg/compare/1.3.3...1.3.4) (2024-02-27)
 
 
