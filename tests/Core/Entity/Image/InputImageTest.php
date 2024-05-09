@@ -7,9 +7,7 @@ use Core\Entity\OptionsBag;
 use Core\Exception\ReadFileException;
 use Tests\Core\BaseTest;
 
-/**
- * @backupGlobals disabled
- */
+#[BackupGlobals('disabled')]
 class InputImageTest extends BaseTest
 {
     /**

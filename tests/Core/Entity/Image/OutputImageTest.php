@@ -7,9 +7,7 @@ use Core\Entity\Image\OutputImage;
 use Core\Entity\OptionsBag;
 use Tests\Core\BaseTest;
 
-/**
- * @backupGlobals disabled
- */
+#[BackupGlobals('disabled')]
 class OutputImageTest extends BaseTest
 {
     /**

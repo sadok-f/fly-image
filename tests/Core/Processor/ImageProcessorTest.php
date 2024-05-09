@@ -6,6 +6,7 @@ use Core\Processor\ImageProcessor;
 use Core\Entity\Image\OutputImage;
 use Core\Entity\ImageMetaInfo;
 use Tests\Core\BaseTest;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class ImageProcessorTest
@@ -31,14 +32,7 @@ class ImageProcessorTest extends BaseTest
         $this->imageProcessor = $this->imageHandler->imageProcessor();
     }
 
-    /**
-     * @param string $options
-     * @param string $expectedSize
-     * @param string $sourceImage
-     *
-     * @dataProvider shrinkProvider
-     * @throws \Exception
-     */
+    #[DataProvider('shrinkProvider')]
     public function testShrinkSuccess(string $options, string $expectedSize, string $sourceImage)
     {
         $image = $this->imageHandler->processImage($options, $sourceImage);
@@ -48,14 +42,7 @@ class ImageProcessorTest extends BaseTest
         $this->assertEquals($expectedSize, $imageDimensions);
     }
 
-    /**
-     * @param string $options
-     * @param string $expectedSize
-     * @param string $sourceImage
-     *
-     * @dataProvider expandProvider
-     * @throws \Exception
-     */
+    #[DataProvider('expandProvider')]
     public function testExpandSuccess(string $options, string $expectedSize, string $sourceImage)
     {
         $image = $this->imageHandler->processImage($options, $sourceImage);
