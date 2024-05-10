@@ -52,19 +52,19 @@ You will need to have **Docker** on your machine. Optionally you can use Docker 
 Pull the docker image
 
 ```bash
-docker pull flyimg/flyimg-build
+docker pull flyimg/flyimg
 ```
 
 Start the container
 
 ```bash
-docker run -itd -p 8080:80 flyimg/flyimg-build
+docker run -itd -p 8080:80 flyimg/flyimg
 ```
 
 To use custom parameters, make a copy of [parameters.yml](https://github.com/flyimg/flyimg/blob/main/config/parameters.yml) to your current directory. Update to suit your needs and run the command with volume parameter to replace the original parameters file.
 
 ```bash
-docker run -itd -p 8080:80 -v $(pwd)/parameters.yml:/var/www/html/config/parameters.yml flyimg/flyimg-build
+docker run -itd -p 8080:80 -v $(pwd)/parameters.yml:/var/www/html/config/parameters.yml flyimg/flyimg
 ```
 
 Check [how to provision the application](#how-to-provision-the-application-on)
