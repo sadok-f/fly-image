@@ -67,28 +67,14 @@ To use custom parameters, make a copy of [parameters.yml](https://github.com/fly
 docker run -itd -p 8080:80 -v $(pwd)/parameters.yml:/var/www/html/config/parameters.yml flyimg/flyimg
 ```
 
-Check [how to provision the application](#how-to-provision-the-application-on)
-
 ## Installation [Development Mode]
 
 You can spin up your own working server in 10 minutes using the provision scripts for [AWS Elastic Beanstalk](https://github.com/flyimg/Elastic-Beanstalk-provision) or the [DigitalOcean Ubuntu Droplets](https://github.com/flyimg/DigitalOcean-provision) <small>(more environments to come)</small>. For other environments or if you want to tweak and play in your machine before rolling out, read along...
 
 ### Installation
 
-You can use `git` or `composer` for the first step.
-
-#### with git
-
 ```sh
 git clone https://github.com/flyimg/flyimg.git
-```
-
-#### with composer
-
-Create the project with `composer create` .
-
-```sh
-composer create-project flyimg/flyimg
 ```
 
 **CD into the folder** and to build the docker image by running:
