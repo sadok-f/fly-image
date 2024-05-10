@@ -1,5 +1,17 @@
 # Flyimg Changelog
 
+# [1.4.0](https://github.com/flyimg/flyimg/compare/1.3.5...1.4.0) (2024-05-10)
+
+
+### Bug Fixes
+
+* Rename the build image to flyimg/flyimg, run composer update, remove linux/arm/v6 from target platform ([526b3a1](https://github.com/flyimg/flyimg/commit/526b3a10fc2ccd844fe96950e9266a73c132a638))
+
+
+### Features
+
+* Update README ([b71c09e](https://github.com/flyimg/flyimg/commit/b71c09e93b43306d7ec35e52a478fe4854daa842))
+
 ## [1.3.5](https://github.com/flyimg/flyimg/compare/1.3.4...1.3.5) (2024-05-09)
 
 
