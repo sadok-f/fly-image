@@ -37,6 +37,10 @@ Check out our demo page where you can test and review Flying's features:
 
 [https://demo.flyimg.io/](https://demo.flyimg.io)
 
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=flyimg/flyimg&type=Date)](https://star-history.com/#flyimg/flyimg&Date)
+
 ## Cloud Run Button
 
 Flyimg can be deployed to GCP as a serverless container in one click with Cloud Run Button:
