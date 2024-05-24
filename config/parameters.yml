@@ -6,6 +6,7 @@ debug: false
 header_cache_days: 365
 
 # Options separator
+# When changing this value, you should change the OPTIONS_SEPARATOR value in web/js/main.js!  
 options_separator: ','
 
 # Security: Signature generation

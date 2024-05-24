@@ -5,6 +5,9 @@ const dynamicInputFields = document.getElementById('dynamic-input-fields');
 let sourceImageValidation = document.getElementById('source-image-validation');
 let sourceImage = document.getElementById('source-image');
 
+// The Separator value should match the options_separator value in config/parameters.yml
+const OPTIONS_SEPARATOR = '+'
+
 const isEmpty = str => !str.trim().length;
 const addInput = () => {
     const htmlDivElement = document.createElement('div');
@@ -121,7 +124,7 @@ const refreshImage = () => {
         }
         input_option.setAttribute('class', 'form-control is-valid');
         let input_key = input.querySelector('option:checked').value
-        imageParams += `${input_key}_${encodeURIComponent(input_option.value)},`;
+        imageParams += `${input_key}_${encodeURIComponent(input_option.value)}`+ OPTIONS_SEPARATOR;
     });
 
     // Get the base image URL

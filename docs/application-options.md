@@ -28,6 +28,7 @@ _Description:_ Number of days for header cache expires `max_age`, this is the he
 
 _Defaults to:_ `,`
 _Description:_ URL options are separated by default by comas `,` but you can change that to some other character, like `._~:[]@!$'()*+;` just be carefull that it doesn't conflict with the sintaz of options you are passing to the URL, there is no strict checking of separating characters.
+When changing this value, you should change the OPTIONS_SEPARATOR value in web/js/main.js.
 
 ### restricted_domains
 
