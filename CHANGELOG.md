@@ -1,5 +1,12 @@
 # Flyimg Changelog
 
+## [1.4.1](https://github.com/flyimg/flyimg/compare/1.4.0...1.4.1) (2024-05-24)
+
+
+### Bug Fixes
+
+* add options_separator to js code ([28fb1a0](https://github.com/flyimg/flyimg/commit/28fb1a0ebe940e2ba57e73fb03179d7c5f456015))
+
 # [1.4.0](https://github.com/flyimg/flyimg/compare/1.3.5...1.4.0) (2024-05-10)
 
 
