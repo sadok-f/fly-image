@@ -50,6 +50,8 @@ class S3StorageProvider implements ServiceProviderInterface
             ],
             'region' => $s3Params['region'],
             'version' => 'latest',
+            'bucket_endpoint' => $s3Params['bucket_endpoint'] ?? true,
+            'use_path_style_endpoint' => $s3Params['use_path_style_endpoint'] ?? false,
         ];
 
         // Support for third party S3 compatible services
