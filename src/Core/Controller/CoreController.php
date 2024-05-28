@@ -51,7 +51,7 @@ class CoreController
         $version = json_decode($composerJsonContent, true)['version'];
 
         $templateFullPath = ROOT_DIR . '/src/Core/Views/' . $templateName . '.html';
-        
+
         if (!file_exists($templateFullPath)) {
             throw new FileNotFoundException('Template file note exist: ' . $templateFullPath);
         }
@@ -59,7 +59,7 @@ class CoreController
         ob_start();
         include($templateFullPath);
         $body = ob_get_contents();
-        $body = str_replace('{$version}',$version,$body);
+        $body = str_replace('{$version}', $version, $body);
         ob_end_clean();
 
         $this->response->setContent($body);
