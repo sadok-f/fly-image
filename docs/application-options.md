@@ -89,6 +89,9 @@ aws_s3:
   secret_key: "s3-secret-id"
   region: "s3-region"
   bucket_name: "s3-bucket-name"
+  endpoint: "https://example.com"
+  bucket_endpoint: true
+  use_path_style_endpoint: false
 ```
 
 ## Footnotes
