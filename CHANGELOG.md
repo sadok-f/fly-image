@@ -1,5 +1,16 @@
 # Flyimg Changelog
 
+## [1.4.3](https://github.com/flyimg/flyimg/compare/1.4.2...1.4.3) (2024-05-28)
+
+
+### Bug Fixes
+
+* add css style to version element ([abc0e85](https://github.com/flyimg/flyimg/commit/abc0e855197f6dd33ef8f4ad755930109ee44fab))
+* add current version to the home page ([106461f](https://github.com/flyimg/flyimg/commit/106461f4812a39e7ce70ede71ae94ccda2d240d0))
+* add missing ambimax/semantic-release-composer library ([12f0640](https://github.com/flyimg/flyimg/commit/12f06403c2e703acae714e99b583e5f36e8cdaac))
+* fixing linting issues ([a5423f5](https://github.com/flyimg/flyimg/commit/a5423f53adb510196cd46c913913e3aa157fb3c1))
+* fixing the @iwavesmedia/semantic-release-composer lib ([8e2b55a](https://github.com/flyimg/flyimg/commit/8e2b55a9bb51c1e797f3b26cb5cd9d5ea3cc8d52))
+
 ## [1.4.2](https://github.com/flyimg/flyimg/compare/1.4.1...1.4.2) (2024-05-28)
 
 
