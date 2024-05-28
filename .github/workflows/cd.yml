@@ -33,7 +33,7 @@ jobs:
           node-version: "lts/*"
 
       - name: Install dependencies
-        run: npm install @semantic-release/git @semantic-release/changelog @ambimax/semantic-release-composer -D
+        run: npm install @semantic-release/git @semantic-release/changelog @iwavesmedia/semantic-release-composer -D
 
       - name: Dry run to get the next release version
         id: tag_version
