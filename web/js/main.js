@@ -6,7 +6,7 @@ let sourceImageValidation = document.getElementById('source-image-validation');
 let sourceImage = document.getElementById('source-image');
 
 // The Separator value should match the options_separator value in config/parameters.yml
-const OPTIONS_SEPARATOR = '+'
+const OPTIONS_SEPARATOR = ','
 
 const isEmpty = str => !str.trim().length;
 const addInput = () => {
