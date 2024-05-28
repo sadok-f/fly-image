@@ -1,5 +1,12 @@
 # Flyimg Changelog
 
+## [1.4.2](https://github.com/flyimg/flyimg/compare/1.4.1...1.4.2) (2024-05-28)
+
+
+### Bug Fixes
+
+* fix default sperator in js code ([ae85361](https://github.com/flyimg/flyimg/commit/ae8536174db6ef353a0e84c057ea3cedc6e2482a))
+
 ## [1.4.1](https://github.com/flyimg/flyimg/compare/1.4.0...1.4.1) (2024-05-24)
 
 
