@@ -4,6 +4,7 @@
   "plugins": [
     "@semantic-release/commit-analyzer",
     "@semantic-release/release-notes-generator",
+    "@ambimax/semantic-release-composer",
     [
       "@semantic-release/github",
       {
@@ -19,7 +20,7 @@
     [
       "@semantic-release/git",
       {
-        "assets": ["CHANGELOG.md"]
+        "assets": ["composer.json", "CHANGELOG.md"]
       }
     ]
   ]

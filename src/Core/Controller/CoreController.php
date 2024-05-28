@@ -47,6 +47,9 @@ class CoreController
      */
     public function render(string $templateName): Response
     {
+        $composerJsonContent = file_get_contents( ROOT_DIR . '/composer.json');
+        $version = json_decode($composerJsonContent, true)['version'];
+    
         $templateFullPath = ROOT_DIR . '/src/Core/Views/' . $templateName . '.html';
 
         if (!file_exists($templateFullPath)) {
