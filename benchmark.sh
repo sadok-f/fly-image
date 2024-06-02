@@ -9,7 +9,7 @@ ab -V >/dev/null 2>&1 || { echo >&2 "Benchmark require Apache ab tools but it's 
 curl "https://upload.wikimedia.org/wikipedia/commons/b/b7/The_sculptures_of_two_mythical_giant_demons%2C_Thotsakan_and_Sahatsadecha%2C_guarding_the_eastern_gate_of_the_main_chapel_of_Wat_Arun%2C_Bangkok.jpg" -o web/wat-arun.jpg
 
 # which port
-port=8081
+port=8099
 # a random name for the container and the image
 randName=$(LC_CTYPE=C tr -dc "[:lower:]" < /dev/random | head -c 8)
 

@@ -1,8 +1,16 @@
 # Flyimg
 
-<p align="center"><a href="https://flyimg.io" target="_blank">
+<p align="center">
+  <a href="https://flyimg.io" target="_blank">
     <img alt="Flyimg" src="https://raw.githubusercontent.com/flyimg/graphic-assets/main/logo/raster/flyimg-logo-rgb.png" width="300">
-</a></p>
+  </a>
+  <br />
+    <a href="https://flyimg.io/"><strong>Official website »</strong></a>
+    <br />
+    <a href="https://github.com/flyimg/flyimg">GitHub</a>
+    ·
+    <a href="https://github.com/flyimg/flyimg/issues">Bugs Report</a>
+</p>
 
 <p align="center">
 <a href="#backers"><img alt="Backers on Open Collective" src="https://opencollective.com/flyimg/backers/badge.svg"></a>
@@ -109,7 +117,7 @@ For Fish shell users:
 docker run -itd -p 8080:80 -v $PWD:/var/www/html --name flyimg flyimg
 ```
 
-The above command will make the Dockerfile run supervisord command which launches 2 processes: **nginx** and **php-fpm** and starts listening on port 8080.
+The above command will make the Dockerfile run s6-overlay command which launches 2 services: **nginx** and **php-fpm** and starts listening on port 80 on the container and port 8080 on the host.
 
 ## Testing Flyimg service
 
