@@ -48,7 +48,14 @@ Check out our demo page where you can test and review Flying's features:
 
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=flyimg/flyimg&type=Date)](https://star-history.com/#flyimg/flyimg&Date)
+<a href="https://star-history.com/#flyimg/flyimg&Date">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=flyimg/flyimg&type=Date&theme=dark" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=flyimg/flyimg&type=Date" />
+   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=flyimg/flyimg&type=Date" />
+ </picture>
+</a>
+
 
 ## Cloud Run Button
 
