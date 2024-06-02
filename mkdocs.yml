@@ -5,8 +5,8 @@ copyright: Copyright &copy; 2024 Flyimg
 repo_url: https://github.com/flyimg/flyimg
 edit_uri: edit/main/docs/
 
-# extra_css:
-#   - assets/stylesheets/extra.css
+extra_css:
+  - assets/stylesheets/extra.css
 
 theme:
   name: material
@@ -16,8 +16,8 @@ theme:
   palette:
      # Palette toggle for light mode
     - media: "(prefers-color-scheme: light)"
-      scheme: default
-      primary: blue grey
+      scheme: flyimg
+      primary: dark-blue
       accent: teal
       toggle:
         icon: material/weather-sunny
@@ -26,7 +26,7 @@ theme:
     # Palette toggle for dark mode
     - media: "(prefers-color-scheme: dark)"
       scheme: slate
-      primary: blue grey
+      primary: light-blue
       accent: teal
       toggle:
         icon: material/weather-night
@@ -45,8 +45,6 @@ theme:
     repo: fontawesome/brands/github
     edit: material/pencil
     view: material/eye
-
-  # custom_dir: docs/overrides
 
 extra:
   analytics:
