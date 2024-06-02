@@ -1,0 +1,79 @@
+site_name: Flyimg
+site_url: https://flyimg.io
+copyright: Copyright &copy; 2024 Flyimg
+
+repo_url: https://github.com/flyimg/flyimg
+edit_uri: edit/main/docs/
+
+# extra_css:
+#   - assets/stylesheets/extra.css
+
+theme:
+  name: material
+  logo: assets/images/flyimg.png
+  favicon: assets/images/flyimg.png
+
+  palette:
+     # Palette toggle for light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: blue grey
+      accent: teal
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to dark mode
+
+    # Palette toggle for dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: blue grey
+      accent: teal
+      toggle:
+        icon: material/weather-night
+        name: Switch to light mode
+
+  features:
+    - content.action.view
+    - content.action.edit
+    - content.code.copy
+    - navigation.footer
+    - navigation.instant
+    - navigation.top
+    - toc.follow
+
+  icon:
+    repo: fontawesome/brands/github
+    edit: material/pencil
+    view: material/eye
+
+  # custom_dir: docs/overrides
+
+extra:
+  analytics:
+    provider: google
+    property: G-6QWHLG77D2
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - admonition
+  - attr_list
+  - md_in_html
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.snippets:
+      base_path:
+        - "."
+
+nav:
+  - Welcome: index.md
+  - Get Started:
+    - Install: install.md
+    - Get Started: get-started.md
+  - Docs:
+    - Configuration: configuration.md
+    - URL Options: url-options.md
+    - Security: security.md
+    - Benchmark: benchmark.md
+    - Unit Tests: unit-tests.md
+    - Enable XDebug: enable-xdebug.md
