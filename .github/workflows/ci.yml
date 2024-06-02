@@ -36,6 +36,7 @@ jobs:
           VALIDATE_MARKDOWN: false
           VALIDATE_NATURAL_LANGUAGE: false
           VALIDATE_JSCPD: false
+          VALIDATE_CSS: false
           VALIDATE_DOCKERFILE_HADOLINT: false
           VALIDATE_GITHUB_ACTIONS: false
 

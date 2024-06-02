@@ -28,10 +28,10 @@ xdebug.remote_host=10.254.254.254
 xdebug.remote_port=9000" >> /usr/local/etc/php/conf.d/xdebug.ini'
 ```
 
-- Restart PHP7-fpm
+- Restart PHP-fpm
 
 ```sh
-docker exec flyimg supervisorctl restart php7-fpm
+docker exec flyimg s6-svc -r /var/run/s6/services/php-fpm
 ```
 
 ## PhpStorm

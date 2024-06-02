@@ -5,7 +5,6 @@
     <img alt="Flyimg" src="https://raw.githubusercontent.com/flyimg/graphic-assets/main/logo/raster/flyimg-logo-rgb.png" width="300">
   </a>
   <br />
-    <a href="https://flyimg.io/"><strong>Official website »</strong></a>
     <br />
     <a href="https://github.com/flyimg/flyimg">GitHub</a>
     ·
@@ -27,7 +26,9 @@ By default, Flyimg generates the **AVIF** image format (when the browser support
 
 Additionally, Flyimg also generates the **WebP** format, along with the impressive **MozJPEG** compression algorithm to optimize images, other formats are supported also such as **PNG** and **GIF**.
 
-## Fetch an image from anywhere; resize, compress, cache and serve...<small> and serve, and serve, and serve...</small>
+## How it works:
+
+**Fetch an image from anywhere; resize, compress, cache and serve...and serve, and serve, and serve...**
 
 You pass the image URL and a set of keys with options, like size or compression. Flyimg will fetch the image, convert it, store it, cache it and serve it. The next time the request comes, it will serve the cached version.
 
@@ -55,83 +56,7 @@ Flyimg can be deployed to GCP as a serverless container in one click with Cloud 
 
 <a href="https://deploy.cloud.run/" target="_blank"><img src="https://storage.googleapis.com/cloudrun/button.svg?git_repo=https://github.com/flyimg/flyimg.git" alt="Run on Google Cloud" style="width:180px;margin-top:20px;"/></a>
 
-## Requirements
 
-You will need to have **Docker** on your machine. Optionally you can use Docker machine to create a virtual environment. We have tested on **Mac**, **Windows** and **Ubuntu**.
-
-## Installation [Deployment mode]
-
-Pull the docker image
-
-```bash
-docker pull flyimg/flyimg
-```
-
-Start the container
-
-```bash
-docker run -itd -p 8080:80 flyimg/flyimg
-```
-
-To use custom parameters, make a copy of [parameters.yml](https://github.com/flyimg/flyimg/blob/main/config/parameters.yml) to your current directory. Update to suit your needs and run the command with volume parameter to replace the original parameters file.
-
-```bash
-docker run -itd -p 8080:80 -v $(pwd)/parameters.yml:/var/www/html/config/parameters.yml flyimg/flyimg
-```
-
-## Installation [Development Mode]
-
-You can spin up your own working server in 10 minutes using the provision scripts for [AWS Elastic Beanstalk](https://github.com/flyimg/Elastic-Beanstalk-provision) or the [DigitalOcean Ubuntu Droplets](https://github.com/flyimg/DigitalOcean-provision) <small>(more environments to come)</small>. For other environments or if you want to tweak and play in your machine before rolling out, read along...
-
-### Installation
-
-```sh
-git clone https://github.com/flyimg/flyimg.git
-```
-
-**CD into the folder** and to build the docker image by running:
-
-```sh
-docker build -t flyimg .
-```
-
-This will download and build the main image, It will take a few minutes. If you get some sort of error related to files not found by apt-get or similar, try this same command again.
-
-**IMPORTANT!** If you cloned the project, only for the first time, you need to run `composer install` **inside** the container:
-
-```sh
-docker exec -it flyimg composer install
-```
-
-Again, it will take a few minutes to download the dependencies. Same as before, if you get some errors you should try running `composer install` again.
-
-Then run the container:
-
-```sh
-docker run -itd -p 8080:80 -v $(pwd):/var/www/html --name flyimg flyimg
-```
-
-For Fish shell users:
-
-```sh
-docker run -itd -p 8080:80 -v $PWD:/var/www/html --name flyimg flyimg
-```
-
-The above command will make the Dockerfile run s6-overlay command which launches 2 services: **nginx** and **php-fpm** and starts listening on port 80 on the container and port 8080 on the host.
-
-## Testing Flyimg service
-
-You can navigate to your machine's IP in port 8080 (ex: `http://127.0.0.1:8080/` ) ; you should get a message saying: **Hello from Flyimg!** and a small homepage of Flyimg already working. If you get any errors at this stage it's most likely that composer has not finished installing or skipped something.
-
-You can test your image resizing service by navigating to: `http://127.0.0.1:8080/upload/w_130,h_113,q_90/https://mudawn.com/assets/butterfly-3000.jpg`
-
-**It's working!**
-
-This is fetching an image from Mozilla, resizing it, saving it and serving it.
-
-### Full Documentation
-
-Full documentation available here **[docs/full-documentation.md](docs/full-documentation.md)**
 
 ## How to transform images
 
@@ -158,7 +83,7 @@ So to get a pretty kitten at 250 pixels wide, with 50% compression, you would wr
 
 ## Adopters
 
-See the [ADOPTERS.md](ADOPTERS.md) file for a list of companies / organisations that are using Flyimg.
+See the [ADOPTERS.md](https://github.com/flyimg/flyimg/blob/main/ADOPTERS.md) file for a list of companies / organisations that are using Flyimg.
 
 ## Supporters
 
@@ -189,7 +114,7 @@ Support us with a monthly donation and help us continue our activities.[[opencol
 
 ## License
 
-The MIT License (MIT). Please see [License File](LICENSE) for more information.
+The MIT License (MIT). Please see [License File](https://github.com/flyimg/flyimg/blob/main/LICENSE) for more information.
 
 Enjoy your Flyimaging!
 

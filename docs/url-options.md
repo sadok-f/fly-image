@@ -2,12 +2,10 @@
 
 This document lists and describes the full list of options available to be passed as parameters in the URL.
 
-For server options check the [server options](/docs/server-options.md)
-
 The server is setup to perform operations based on the following URL pattern.
 
 ```html
-https://server.address.io/process-type/image_options/path_to_image
+https://server.address.io/[process-type]/[image_options]/[path_to_image]
 ```
 
 for example:
@@ -17,6 +15,16 @@ https://demo.flyimg.io/upload/w_500/https://mudawn.com/assets/butterfly-3000.jpg
 ```
 
 Explanation:
+
+## process-type: _upload_ or _path_
+
+There are 2 main proceses you can do for images.
+
+The first: **upload**, grabs an image from a URL, transforms it, saves it, and serves it, as an image, with all the appropriate headers.
+
+The second: **path**, grabs an image from a URL, transforms it, saves it, and returns the absolute path to the image as a string, in the body of the response.
+
+---
 
 ## path_to_image
 
@@ -367,16 +375,6 @@ You can also use a shorter syntax for the first 60 seconds.
 **example:`tm_10`**
 
 `tm_10` : `https://demo.flyimg.io/upload/tm_10/http://mudawn.com/big_buck_bunny_720p_2mb.mp4`
-
----
-
-## process-type: _upload_ or _path_
-
-There are 2 main proceses you can do for images.
-
-The first: **upload**, grabs an image from a URL, transforms it, saves it, and serves it, as an image, with all the appropriate headers.
-
-The second: **path**, grabs an image from a URL, transforms it, saves it, and returns the absolute path to the image as a string, in the body of the response.
 
 ---
 
