@@ -1,4 +1,4 @@
-# Basic Usage Examples
+# Basic Usage
 
 You can see the full list of options configurable by URL params, **with examples**, in the [URL-Options document](url-options.md)
 
@@ -193,7 +193,7 @@ _Description:_ When using the Face crop option and when the image contain more t
 
 `fcp_2` : `https://demo.flyimg.io/upload/fc_1,fcp_2/http://facedetection.jaysalvat.com/img/faces.jpg`
 
-![fcp_2](https://demo.flyimg.io/upload/fc_1,fcp_2,o_jpg/http://facedetection.jaysalvat.com/img/faces.jpg)
+![fcp_2](https://demo.flyimg.io/upload/fc_1,fcp_2,o_png/http://facedetection.jaysalvat.com/img/faces.jpg)
 
 ## `fb` : face-blur
 
