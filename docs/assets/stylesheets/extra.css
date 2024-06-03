@@ -30,3 +30,18 @@
     --md-primary-bg-color--light: #ffffffb3;
     --md-typeset-a-color: #4051b5;
 }
+
+.md-typeset .twemoji {
+    color: #e92063;
+}
+@keyframes beat {
+    0%, 40%, 80%, 100% {
+        transform: scale(1);
+    }
+    20%, 60% {
+        transform: scale(1.15);
+    }
+}
+.beat {
+    animation: beat 1000ms infinite;
+}

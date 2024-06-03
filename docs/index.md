@@ -1,5 +1,3 @@
-# Flyimg
-
 <p align="center">
   <a href="https://flyimg.io" target="_blank">
     <img alt="Flyimg" src="https://raw.githubusercontent.com/flyimg/graphic-assets/main/logo/raster/flyimg-logo-rgb.png" width="300">
@@ -42,9 +40,12 @@ You pass the image URL and a set of keys with options, like size or compression.
 ![Flyimg-demo](https://demo.flyimg.io/upload/w_300,q_90/https://mudawn.com/assets/butterfly-3000.jpg)
 
 ## Demo
+
 Check out our demo page where you can test and review Flying's features:
 
-[https://demo.flyimg.io/](https://demo.flyimg.io)
+<div class="result" markdown>
+[https://demo.flyimg.io/](https://demo.flyimg.io) :material-cursor-default-click-outline:{ .beat }
+</div>
 
 ## Star History
 
@@ -100,7 +101,9 @@ A special thanks to JetBrains for supporting our project with their [open source
 
 ## Contributors
 
-This project exists thanks to all the people who contributed to it.
+<div class="result" markdown>
+This project exists thanks to all the people who contributed to it :heart:{ .beat }
+</div>
 <a href="https://github.com/flyimg/flyimg/graphs/contributors"><img src="https://opencollective.com/flyimg/contributors.svg?width=890" /></a>
 
 ## Backers & Sponsors

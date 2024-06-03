@@ -59,6 +59,9 @@ markdown_extensions:
   - md_in_html
   - pymdownx.details
   - pymdownx.superfences
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
   - pymdownx.snippets:
       base_path:
         - "."
@@ -67,7 +70,7 @@ nav:
   - Welcome: index.md
   - Get Started:
     - Install: install.md
-    - Get Started: get-started.md
+    - Basic Usage: basic-usage.md
   - Docs:
     - Configuration: configuration.md
     - URL Options: url-options.md
