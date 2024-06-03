@@ -45,9 +45,19 @@ Check out our demo page where you can test and review Flying's features:
 
 [https://demo.flyimg.io/](https://demo.flyimg.io)
 
+## Documentation
+
+Documentation available here: [https://flyimg.io](https://flyimg.io)
+
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=flyimg/flyimg&type=Date)](https://star-history.com/#flyimg/flyimg&Date)
+<a href="https://star-history.com/#flyimg/flyimg&Date">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=flyimg/flyimg&type=Date&theme=dark" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=flyimg/flyimg&type=Date" />
+   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=flyimg/flyimg&type=Date" />
+ </picture>
+</a>
 
 ## Cloud Run Button
 
@@ -59,7 +69,7 @@ Flyimg can be deployed to GCP as a serverless container in one click with Cloud 
 
 You will need to have **Docker** on your machine. Optionally you can use Docker machine to create a virtual environment. We have tested on **Mac**, **Windows** and **Ubuntu**.
 
-## Installation [Deployment mode]
+## Usage
 
 Pull the docker image
 
@@ -79,11 +89,7 @@ To use custom parameters, make a copy of [parameters.yml](https://github.com/fly
 docker run -itd -p 8080:80 -v $(pwd)/parameters.yml:/var/www/html/config/parameters.yml flyimg/flyimg
 ```
 
-## Installation [Development Mode]
-
-You can spin up your own working server in 10 minutes using the provision scripts for [AWS Elastic Beanstalk](https://github.com/flyimg/Elastic-Beanstalk-provision) or the [DigitalOcean Ubuntu Droplets](https://github.com/flyimg/DigitalOcean-provision) <small>(more environments to come)</small>. For other environments or if you want to tweak and play in your machine before rolling out, read along...
-
-### Installation
+## Build locally [Development Mode]
 
 ```sh
 git clone https://github.com/flyimg/flyimg.git
@@ -129,9 +135,6 @@ You can test your image resizing service by navigating to: `http://127.0.0.1:808
 
 This is fetching an image from Mozilla, resizing it, saving it and serving it.
 
-### Full Documentation
-
-Full documentation available here **[docs/full-documentation.md](docs/full-documentation.md)**
 
 ## How to transform images
 
