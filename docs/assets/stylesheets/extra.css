@@ -31,6 +31,9 @@
     --md-typeset-a-color: #4051b5;
 }
 
+.md-header__button:hover{
+    opacity: 1;
+}
 .md-typeset .twemoji {
     color: #e92063;
 }
