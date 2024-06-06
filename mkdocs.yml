@@ -11,7 +11,7 @@ extra_css:
 theme:
   name: material
   logo: assets/images/flyimg.png
-  favicon: assets/images/flyimg.png
+  favicon: assets/images/favicon.ico
 
   palette:
      # Palette toggle for light mode
