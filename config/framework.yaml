@@ -1,0 +1,4 @@
+# config/framework.yaml
+framework:
+  secret: xxxsasdsa
+  profiler: { only_exceptions: false }
