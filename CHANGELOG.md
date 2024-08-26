@@ -1,5 +1,13 @@
 # Flyimg Changelog
 
+## [1.4.4](https://github.com/flyimg/flyimg/compare/1.4.3...1.4.4) (2024-08-26)
+
+
+### Bug Fixes
+
+* 483 ([0b8027f](https://github.com/flyimg/flyimg/commit/0b8027fbe63474addb7d390a75b8cd53789e108a))
+* 483 ([f50895e](https://github.com/flyimg/flyimg/commit/f50895e25b4e305bee8bcebce37ff2f350cc3c89))
+
 ## [1.4.3](https://github.com/flyimg/flyimg/compare/1.4.2...1.4.3) (2024-05-28)
 
 
