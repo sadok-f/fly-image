@@ -76,7 +76,7 @@ class InputImage
      * @param string $url
      * @return string
      */
-    private function _encodeUrl($url)
+    private function encodeUrl($url)
     {
         // URL scheme was not always set as the input scheme
         if (preg_match("!https?:/[a-zA-Z]!", $url)) {
@@ -95,13 +95,14 @@ class InputImage
         $host = $parsedUrl['host'];
         $port = isset($parsedUrl['port']) ? ':' . $parsedUrl['port'] : '';
 
-        $path = isset($parsedUrl['path']) ? implode('/', array_map('rawurlencode', explode('/', $parsedUrl['path']))) : '';
+        $path = '';
+        if (isset($parsedUrl['path'])) {
+            $path = implode('/', array_map('rawurlencode', explode('/', $parsedUrl['path'])));
+        }
         $query = isset($parsedUrl['query']) ? '?' . $parsedUrl['query'] : '';
         $fragment = isset($parsedUrl['fragment']) ? '#' . $parsedUrl['fragment'] : '';
 
-        $encodedUrl = $parsedUrl['scheme'] . '://' . $auth . $host . $port . $path . $query . $fragment;
-
-        return $encodedUrl;
+        return  $parsedUrl['scheme'] . '://' . $auth . $host . $port . $path . $query . $fragment;;
     }
 
     /**
@@ -144,7 +145,7 @@ class InputImage
         ];
         $context = stream_context_create($opts);
 
-        $this->sourceImageUrl = $this->_encodeUrl($this->sourceImageUrl);
+        $this->sourceImageUrl = $this->encodeUrl($this->sourceImageUrl);
 
         if (!$stream = @fopen($this->sourceImageUrl, 'r', false, $context)) {
             throw  new ReadFileException(
