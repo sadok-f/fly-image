@@ -102,7 +102,7 @@ class InputImage
         $query = isset($parsedUrl['query']) ? '?' . $parsedUrl['query'] : '';
         $fragment = isset($parsedUrl['fragment']) ? '#' . $parsedUrl['fragment'] : '';
 
-        return  $parsedUrl['scheme'] . '://' . $auth . $host . $port . $path . $query . $fragment;;
+        return  $parsedUrl['scheme'] . '://' . $auth . $host . $port . $path . $query . $fragment;
     }
 
     /**
