@@ -124,7 +124,7 @@ class InputImage
             foreach ($forwardRequestHeaders as $name) {
                 if ($requestHeaders->has($name)) {
                     $value = $requestHeaders->get($name);
-                    $headers[]= "$name: $value";
+                    $headers[] = "$name: $value";
                     if ('Authorization' === $name) {
                         $this->sourceImagePath .= md5($value);
                     }
@@ -142,12 +142,13 @@ class InputImage
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);  // Allow redirects
             curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);  // Add custom headers
-            curl_setopt($ch, CURLOPT_TIMEOUT, $this->optionsBag->appParameters()->parameterByKey('source_image_request_timeout'));
+            curl_setopt($ch, CURLOPT_TIMEOUT, $this->optionsBag->appParameters()
+                        ->parameterByKey('source_image_request_timeout'));
 
             $imageData = curl_exec($ch);
 
             if (curl_errno($ch)) {
-                throw new ReadFileException( 'Curl error: ' . curl_error($ch));
+                throw new ReadFileException('Curl error: ' . curl_error($ch));
             } else {
                 $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
                 if ($httpCode == 200) {
