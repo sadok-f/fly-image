@@ -52,7 +52,8 @@ enable_avif: true
 enable_webp: true
 
 # Extra options for the header sent to source image server, as some servers requires the User-Agent.
-header_extra_options: 'User-Agent: Mozilla/5.0 (Windows; U; Windows NT 6.1; rv:2.2) Gecko/20110201'
+header_extra_options: 
+  - 'User-Agent: Mozilla/5.0 (Windows; U; Windows NT 6.1; rv:2.2) Gecko/20110201'
 
 # List of request header to forward to source image server (example Authorization)
 forward_request_headers: []

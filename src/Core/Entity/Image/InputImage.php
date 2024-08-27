@@ -112,7 +112,9 @@ class InputImage
      */
     protected function saveToTemporaryFile()
     {
-        $header = $this->optionsBag->appParameters()->parameterByKey('header_extra_options');
+        $this->sourceImageUrl = $this->encodeUrl($this->sourceImageUrl);
+
+        $headers = $this->optionsBag->appParameters()->parameterByKey('header_extra_options');
         $refresh = $this->optionsBag->get('refresh');
         $forwardRequestHeaders = (array)$this->optionsBag
             ->appParameters()
@@ -122,7 +124,7 @@ class InputImage
             foreach ($forwardRequestHeaders as $name) {
                 if ($requestHeaders->has($name)) {
                     $value = $requestHeaders->get($name);
-                    $header .= "\r\n$name: $value";
+                    $headers[]= "$name: $value";
                     if ('Authorization' === $name) {
                         $this->sourceImagePath .= md5($value);
                     }
@@ -134,28 +136,36 @@ class InputImage
             return;
         }
 
-        $opts = [
-            'http' =>
-                [
-                    'timeout' => $this->optionsBag->appParameters()->parameterByKey('source_image_request_timeout'),
-                    'header' => $header,
-                    'method' => 'GET',
-                    'max_redirects' => '5',
-                ],
-        ];
-        $context = stream_context_create($opts);
+        if (filter_var($this->sourceImageUrl, FILTER_VALIDATE_URL)) {
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $this->sourceImageUrl);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);  // Allow redirects
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);  // Add custom headers
+            curl_setopt($ch, CURLOPT_TIMEOUT, $this->optionsBag->appParameters()->parameterByKey('source_image_request_timeout'));
 
-        $this->sourceImageUrl = $this->encodeUrl($this->sourceImageUrl);
+            $imageData = curl_exec($ch);
 
-        if (!$stream = @fopen($this->sourceImageUrl, 'r', false, $context)) {
-            throw  new ReadFileException(
-                'Error occurred while trying to read the file Url : '
-                . $this->sourceImageUrl . ', error : ' . implode(',', error_get_last())
-            );
+            if (curl_errno($ch)) {
+                throw new ReadFileException( 'Curl error: ' . curl_error($ch));
+            } else {
+                $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                if ($httpCode == 200) {
+                    file_put_contents($this->sourceImagePath, $imageData);
+                } else {
+                    throw new ReadFileException("Failed to download the image. HTTP Status Code: $httpCode");
+                }
+            }
+            curl_close($ch);
+        } else {
+            // Handle local file
+            if (file_exists($this->sourceImageUrl)) {
+                $imageData = file_get_contents($this->sourceImageUrl);
+                file_put_contents($this->sourceImagePath, $imageData);
+            } else {
+                throw  new ReadFileException('Local file does not exist.');
+            }
         }
-        $content = stream_get_contents($stream);
-        fclose($stream);
-        file_put_contents($this->sourceImagePath, $content);
     }
 
     /**
