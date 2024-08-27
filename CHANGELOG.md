@@ -1,5 +1,13 @@
 # Flyimg Changelog
 
+## [1.4.5](https://github.com/flyimg/flyimg/compare/1.4.4...1.4.5) (2024-08-27)
+
+
+### Bug Fixes
+
+* fixing linting issues ([dd82edb](https://github.com/flyimg/flyimg/commit/dd82edb35d6fd58e09722c538df2d0123a7d0240))
+* Redirect URLs without protocol schema are not handled correctly, closes [#486](https://github.com/flyimg/flyimg/issues/486) ([11b785e](https://github.com/flyimg/flyimg/commit/11b785e784d4980997e86899d4f8bdafe3b767f5))
+
 ## [1.4.4](https://github.com/flyimg/flyimg/compare/1.4.3...1.4.4) (2024-08-26)
 
 
