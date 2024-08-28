@@ -1,4 +1,4 @@
-FROM flyimg/base-image:1.5.0
+FROM base-img
 
 COPY .    /var/www/html
 
@@ -9,3 +9,7 @@ RUN usermod -u 1000 www-data && \
     chmod 777 -R var/  web/uploads/
 
 RUN composer install --no-dev --optimize-autoloader
+
+COPY cleanup-tmp.sh cleanup-tmp.sh
+RUN chmod +x cleanup-tmp.sh
+RUN ./cleanup-tmp.sh
