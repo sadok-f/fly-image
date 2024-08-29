@@ -9,6 +9,16 @@ Here are the app options you can configure with the [config/parameters.yml](http
 _Defaults to:_ `false`
 _Description:_ Enables debug mode, currently is used only for the tests, so there's no harm in leaving it as it is.
 
+### enable_cronjob_cleanup
+
+_Defaults to:_ `true`
+_Description:_ # To enable the Cleanup Cronjob to purge the var/tmp folder
+
+### cronjob_cleanup_interval
+
+_Defaults to:_ `0 */5 * * *`
+_Description:_ The cronjob interval to cleanup the var/tmp folder
+
 ### enable_avif
 
 _Defaults to:_ `true`
