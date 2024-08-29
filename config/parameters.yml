@@ -5,8 +5,11 @@ debug: true
 # Number of days for header cache expires `max_age`
 header_cache_days: 365
 
+# To enable the Cleanup Cronjob to purge the var/tmp folder
+enable_cronjob_cleanup: true
+
 # The cronjob interval to cleanup the var/tmp folder
-cronjob_cleanup_interval: "*/5 * * * *"
+cronjob_cleanup_interval: "0 */5 * * *"
 
 # Options separator
 # When changing this value, you should change the OPTIONS_SEPARATOR value in web/js/main.js!  
