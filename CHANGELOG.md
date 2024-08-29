@@ -1,5 +1,15 @@
 # Flyimg Changelog
 
+## [1.4.6](https://github.com/flyimg/flyimg/compare/1.4.5...1.4.6) (2024-08-29)
+
+
+### Bug Fixes
+
+* add cleanup cron job to purge tmp folder ([03b46f9](https://github.com/flyimg/flyimg/commit/03b46f9ba76577ed52e64a5d28f470b605350ebe))
+* add cleanup cronjob documentation ([087b075](https://github.com/flyimg/flyimg/commit/087b0753b193332194ebd5e788a0e512226c0067))
+* add Cleanup cronjob to purge var/tmp folder ([1f44916](https://github.com/flyimg/flyimg/commit/1f44916442d41ff2842da8b466cd2bf4d9eb5b71))
+* use latest base image that include cron service ([5bcfa99](https://github.com/flyimg/flyimg/commit/5bcfa99cd15c71f44e6b75dc22ef0e475df66747))
+
 ## [1.4.5](https://github.com/flyimg/flyimg/compare/1.4.4...1.4.5) (2024-08-27)
 
 
