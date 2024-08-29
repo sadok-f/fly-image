@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 # Path to your parameters.yml file
 YAML_FILE="/var/www/html/config/parameters.yml"
 
@@ -18,6 +20,11 @@ if [ "$ENABLE_CLEANUP" == "false" ]; then
     rm "$CRON_FILE"
     echo "Cron job removed."
   fi
+  exit 0
+fi
+
+if [ ! -d "$TMP_DIR" ]; then
+  echo "Directory $TMP_DIR does not exist. Exiting."
   exit 0
 fi
 
