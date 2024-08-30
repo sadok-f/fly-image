@@ -23,6 +23,7 @@ if [ "$ENABLE_CLEANUP" == "false" ]; then
   exit 0
 fi
 
+# Exiting when $TMP_DIR does not exist
 if [ ! -d "$TMP_DIR" ]; then
   echo "Directory $TMP_DIR does not exist. Exiting."
   exit 0
@@ -44,5 +45,3 @@ echo "$CRON_INTERVAL root /var/www/html/cleanup-tmp.sh" > "$CRON_FILE"
 # Ensure cron job has the correct permissions
 chmod 0644 "$CRON_FILE"
 
-# Apply the cron job
-cron -f
