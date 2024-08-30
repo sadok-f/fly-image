@@ -1,5 +1,12 @@
 # Flyimg Changelog
 
+## [1.4.7](https://github.com/flyimg/flyimg/compare/1.4.6...1.4.7) (2024-08-30)
+
+
+### Bug Fixes
+
+* use new base image version (php 8.3 + updated libraries versions) ([d09b6bb](https://github.com/flyimg/flyimg/commit/d09b6bb8a4102168b6f48b00eac6847c7334c681))
+
 ## [1.4.6](https://github.com/flyimg/flyimg/compare/1.4.5...1.4.6) (2024-08-29)
 
 
