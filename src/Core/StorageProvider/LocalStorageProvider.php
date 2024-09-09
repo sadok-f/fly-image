@@ -27,7 +27,7 @@ class LocalStorageProvider implements ServiceProviderInterface
             [
                 'flysystem.filesystems' => [
                     'storage_handler' => [
-                        'adapter' => 'League\Flysystem\Adapter\Local',
+                        'adapter' => 'League\Flysystem\Local\LocalFilesystemAdapter',
                         'args' => [UPLOAD_DIR],
                     ],
                 ],
