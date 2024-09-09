@@ -61,7 +61,7 @@ class S3StorageProviderTest extends BaseTest
 
         $this->app->register(new S3StorageProvider());
         $this->assertStringMatchesFormat(
-            'https://%s.s3.%s.amazonaws.com/%s', 
+            'https://%s.s3.%s.amazonaws.com/%s',
             $this->app['flysystems']['file_path_resolver']
         );
     }

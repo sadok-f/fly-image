@@ -6,7 +6,6 @@ use League\Flysystem\MountManager;
 use Pimple\Container;
 use League\Flysystem\Filesystem;
 
-
 trait LocalProviderTrait
 {
     /**
