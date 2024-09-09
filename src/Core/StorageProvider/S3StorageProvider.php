@@ -30,8 +30,8 @@ class S3StorageProvider implements ServiceProviderInterface
         $this->registerS3ServiceProvider($app, $s3Params);
         $app['flysystems']['file_path_resolver'] = function () use ($s3Params) {
             return isset($s3Params['endpoint'])
-                ? sprintf($s3Params['endpoint'] . '/%s/', $s3Params['endpoint'], $s3Params['bucket_name']) . '%s'
-                : sprintf('https://s3.%s.amazonaws.com/%s/', $s3Params['region'], $s3Params['bucket_name']) . '%s';
+                ? sprintf($s3Params['endpoint'], $s3Params['bucket_name'],$s3Params['region']) . '%s'
+                : sprintf('https://%s.s3.%s.amazonaws.com/', $s3Params['bucket_name'], $s3Params['region']) . '%s';
         };
     }
 
@@ -50,7 +50,7 @@ class S3StorageProvider implements ServiceProviderInterface
             ],
             'region' => $s3Params['region'],
             'version' => 'latest',
-            'bucket_endpoint' => $s3Params['bucket_endpoint'] ?? true,
+            'bucket_endpoint' => $s3Params['bucket_endpoint'] ?? false,
             'use_path_style_endpoint' => $s3Params['use_path_style_endpoint'] ?? false,
         ];
 
@@ -64,10 +64,10 @@ class S3StorageProvider implements ServiceProviderInterface
             [
                 'flysystem.filesystems' => [
                     'storage_handler' => [
-                        'adapter' => 'League\Flysystem\AwsS3v3\AwsS3Adapter',
+                        'adapter' => 'League\Flysystem\AwsS3V3\AwsS3V3Adapter',
                         'args' => [
                             new S3Client($clientParams),
-                            $s3Params['bucket_name'],
+                            urlencode($s3Params['bucket_name']),
                         ],
                     ],
                 ],

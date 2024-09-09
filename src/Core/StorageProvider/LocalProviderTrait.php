@@ -5,11 +5,7 @@ namespace Core\StorageProvider;
 use League\Flysystem\MountManager;
 use Pimple\Container;
 use League\Flysystem\Filesystem;
-use League\Flysystem\Plugin\EmptyDir;
-use League\Flysystem\Plugin\GetWithMetadata;
-use League\Flysystem\Plugin\ListFiles;
-use League\Flysystem\Plugin\ListPaths;
-use League\Flysystem\Plugin\ListWith;
+
 
 trait LocalProviderTrait
 {
@@ -23,13 +19,7 @@ trait LocalProviderTrait
     protected function registerFlysystems(Container $app)
     {
         $app['flysystem.filesystems'] = [];
-        $app['flysystem.plugins'] = [
-            new EmptyDir(),
-            new GetWithMetadata(),
-            new ListFiles(),
-            new ListPaths(),
-            new ListWith(),
-        ];
+
         $app['flysystems'] = function (Container $app) {
             $flysystems = new Container();
             foreach ($app['flysystem.filesystems'] as $alias => $parameters) {
@@ -58,12 +48,6 @@ trait LocalProviderTrait
     {
         $adapter = new \ReflectionClass($parameters['adapter']);
         $filesystem = new Filesystem($adapter->newInstanceArgs($parameters['args']), $this->getConfig($parameters));
-
-        foreach ($app['flysystem.plugins'] as $plugin) {
-            $plugin->setFilesystem($filesystem);
-            $filesystem->addPlugin($plugin);
-        }
-
         return $filesystem;
     }
 
@@ -73,6 +57,6 @@ trait LocalProviderTrait
             return $parameters['config'];
         }
 
-        return null;
+        return [];
     }
 }

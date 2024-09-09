@@ -75,7 +75,7 @@ class Response extends BaseResponse
     protected function addLastModifiedHeader($outputImageName): void
     {
         $storageHandler = $this->storageFileSystem['storage_handler'];
-        $lastModified = gmdate("D, d M Y H:i:s T", $storageHandler->getTimestamp($outputImageName));
+        $lastModified = gmdate("D, d M Y H:i:s T", $storageHandler->lastModified($outputImageName));
         $this->headers->set('Last-Modified', $lastModified);
     }
 
@@ -125,6 +125,6 @@ class Response extends BaseResponse
      */
     private function getOutputImageSize(OutputImage $image): string
     {
-        return $this->storageFileSystem['storage_handler']->getSize($image->getOutputImageName());
+        return $this->storageFileSystem['storage_handler']->fileSize($image->getOutputImageName());
     }
 }

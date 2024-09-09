@@ -2,7 +2,7 @@
 
 namespace Tests\Core\StorageProvider;
 
-use Aws\S3\Exception\S3Exception;
+use League\Flysystem\UnableToCheckFileExistence;
 use Core\Exception\MissingParamsException;
 use Core\Handler\ImageHandler;
 use Core\StorageProvider\S3StorageProvider;
@@ -18,7 +18,7 @@ class S3StorageProviderTest extends BaseTest
      */
     public function testUploadActionWithS3StorageS3Exception()
     {
-        $this->expectException(S3Exception::class);
+        $this->expectException(UnableToCheckFileExistence::class);
 
         unset($this->app['flysystems']);
         unset($this->app['image.handler']);
@@ -60,7 +60,7 @@ class S3StorageProviderTest extends BaseTest
         );
 
         $this->app->register(new S3StorageProvider());
-        $this->assertStringContainsString('https://s3', $this->app['flysystems']['file_path_resolver']);
+        $this->assertStringMatchesFormat('https://%s.s3.%s.amazonaws.com/%s', $this->app['flysystems']['file_path_resolver']);
     }
 
     /**

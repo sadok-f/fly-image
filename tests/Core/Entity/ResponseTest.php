@@ -15,7 +15,7 @@ class ResponseTest extends BaseTest
         $this->app['params']->addParameter('disable_cache', false);
         $image = $this->imageHandler->processImage('w_10,h_10,rf_1', parent::PNG_TEST_IMAGE);
         $this->generatedImage[] = $image;
-        $this->assertFileExists(UPLOAD_DIR . $image->getOutputImageName());
+        $this->assertTrue($this->app['flysystems']['storage_handler']->has($image->getOutputImageName()));
     }
 
     /**
@@ -27,6 +27,6 @@ class ResponseTest extends BaseTest
         $this->app['params']->addParameter('disable_cache', true);
         $image = $this->imageHandler->processImage('w_100,h_250,rf_1', parent::JPG_TEST_IMAGE);
         $this->response->generateImageResponse($image);
-        $this->assertFileDoesNotExist(UPLOAD_DIR . $image->getOutputImageName());
+        $this->assertFalse($this->app['flysystems']['storage_handler']->has($image->getOutputImageName()));
     }
 }
