@@ -2,6 +2,9 @@
 # Debug
 debug: false
 
+# Home page title
+home_page_title: Flyimg
+
 # Number of days for header cache expires `max_age`
 header_cache_days: 365
 
