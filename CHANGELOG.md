@@ -1,5 +1,12 @@
 # Flyimg Changelog
 
+## [1.4.8](https://github.com/flyimg/flyimg/compare/1.4.7...1.4.8) (2024-09-09)
+
+
+### Bug Fixes
+
+* fixing S3 not working, upgrading league/flysystem lib, closes[#493](https://github.com/flyimg/flyimg/issues/493) ([12cf7df](https://github.com/flyimg/flyimg/commit/12cf7df616425c3d6ce2d49e4c0951fe6e1f8137))
+
 ## [1.4.7](https://github.com/flyimg/flyimg/compare/1.4.6...1.4.7) (2024-08-30)
 
 
