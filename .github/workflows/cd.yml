@@ -176,4 +176,4 @@ jobs:
           script: |
             cd /home/deployer/
             bash -c "sed 's/VERSION/${{ needs.manifest.outputs.new_tag_version }}/g' compose.yaml.tpl > compose.yaml"
-            bash -c "docker compose up -d"
+            bash -c "docker stack deploy -c compose.yaml flyimg --detach"
