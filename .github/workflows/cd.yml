@@ -175,5 +175,5 @@ jobs:
           command_timeout: 20m
           script: |
             cd /home/deployer/
-            bash -c "sed 's/VERSION/${{ needs.manifest.outputs.new_tag_version }}/g' compose.yaml.tpl > compose.yaml"
-            bash -c "docker stack deploy -c compose.yaml flyimg --detach"
+            bash -c "sed 's/VERSION/${{ needs.manifest.outputs.new_tag_version }}/g' flyimg-swarm.yaml.tpl > flyimg-swarm.yaml"
+            bash -c "docker stack deploy -c flyimg-swarm.yaml flyimg --detach"
