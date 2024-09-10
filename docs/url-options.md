@@ -139,9 +139,9 @@ _Description:_ Sets the compression level for the output image. Your best result
 
 **example:`q_100`,`q_75`,...**
 
-`q_30` : `https://demo.flyimg.io/upload/q_20,w_600/https://mudawn.com/assets/butterfly-3000.jpg`
+`q_30` : `https://demo.flyimg.io/upload/q_30,w_600/https://mudawn.com/assets/butterfly-3000.jpg`
 
-![q_30](https://demo.flyimg.io/upload/q_20,w_600,o_jpg/https://mudawn.com/assets/butterfly-3000.jpg)
+![q_30](https://demo.flyimg.io/upload/q_30,w_600,o_jpg/https://mudawn.com/assets/butterfly-3000.jpg)
 
 `q_100` : `https://demo.flyimg.io/upload/q_100,w_600/https://mudawn.com/assets/butterfly-3000.jpg`
 
@@ -286,7 +286,7 @@ _Description:_ When using the Face crop option and when the image contain more t
 
 `fcp_2` : `https://demo.flyimg.io/upload/fc_1,fcp_2/http://facedetection.jaysalvat.com/img/faces.jpg`
 
-![fcp_2](https://demo.flyimg.io/upload/fc_1,fcp_2,o_jpg/http://facedetection.jaysalvat.com/img/faces.jpg)
+![fcp_2](https://demo.flyimg.io/upload/fc_1,fcp_2/http://facedetection.jaysalvat.com/img/faces.jpg)
 
 ### `fb` : face-blur
 
@@ -354,7 +354,7 @@ _Description:_ Sets the target page of the PDF. If not set, the default is page 
 
 **example:`pg_2`**
 
-`pg_2` : `https://demo.flyimg.io/upload/pg_2/http://mudawn.com/lighthouses.pdf`
+`pg_2` : `https://demo.flyimg.io/upload/pg_2/https://mudawn.com/assets/lighthouses.pdf`
 
 ### Video options
 
@@ -368,13 +368,15 @@ _Description:_ Sets the frame capture time duration point in the video. If not s
 
 **example:`tm_00:00:05`**
 
-`tm_00:00:05` : `https://demo.flyimg.io/upload/tm_00:00:05/http://mudawn.com/big_buck_bunny_720p_2mb.mp4`
+`tm_00:00:05` : `https://demo.flyimg.io/upload/tm_00:00:05/https://mudawn.com/assets/big_buck_bunny_720p_2mb.mp4`
+
+![tm_00:00:05](https://demo.flyimg.io/upload/tm_00:00:05/https://mudawn.com/assets/big_buck_bunny_720p_2mb.mp4)
 
 You can also use a shorter syntax for the first 60 seconds.
 
 **example:`tm_10`**
 
-`tm_10` : `https://demo.flyimg.io/upload/tm_10/http://mudawn.com/big_buck_bunny_720p_2mb.mp4`
+`tm_10` : `https://demo.flyimg.io/upload/tm_10/https://mudawn.com/assets/big_buck_bunny_720p_2mb.mp4`
 
 ---
 
