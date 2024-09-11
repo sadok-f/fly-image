@@ -2,7 +2,7 @@
 # facedetect: a simple face detector for batch processing
 # Copyright(c) 2013-2017 by wave++ "Yuri D'Elia" <wavexx@thregr.org>
 # Distributed under GPLv2+ (see COPYING) WITHOUT ANY WARRANTY.
-from __future__ import print_function, division, generators, unicode_literals
+from __future__ import division, generators, print_function, unicode_literals
 
 import argparse
 import numpy as np

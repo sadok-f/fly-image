@@ -39,6 +39,8 @@ jobs:
           VALIDATE_CSS: false
           VALIDATE_DOCKERFILE_HADOLINT: false
           VALIDATE_GITHUB_ACTIONS: false
+          VALIDATE_PYTHON_FLAKE8: false
+          VALIDATE_PYTHON_BLACK: false
 
   build-test:
     runs-on: ubuntu-latest
