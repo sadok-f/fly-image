@@ -1,0 +1,4 @@
+# this file is not used in Flyimg installation, it just informative to list the dependencies of facedetect.py and smartcrop.py files
+numpy 
+pillow
+pillow-avif-plugin
