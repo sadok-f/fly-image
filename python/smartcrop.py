@@ -12,6 +12,11 @@ import numpy as np
 from PIL import Image
 from PIL.ImageFilter import Kernel
 
+try:
+    import pillow_avif
+except ImportError:
+    pass
+
 
 def saturation(image):
     r, g, b = image.split()
