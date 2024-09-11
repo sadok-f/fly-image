@@ -21,9 +21,6 @@ class FaceDetectProcessor extends Processor
      */
     public function cropFaces(OutputImage $outputImage, int $faceCropPosition = 0)
     {
-        if (!is_executable(self::FACEDETECT_COMMAND)) {
-            return;
-        }
         $faceDetectCmd = new Command(self::FACEDETECT_COMMAND);
         $faceDetectCmd->addArgument($outputImage->getOutputTmpPath());
         $output = $this->execute($faceDetectCmd);
@@ -50,9 +47,6 @@ class FaceDetectProcessor extends Processor
      */
     public function blurFaces(OutputImage $outputImage)
     {
-        if (!is_executable(self::FACEDETECT_COMMAND)) {
-            return;
-        }
         $faceDetectCmd = new Command(self::FACEDETECT_COMMAND);
         $faceDetectCmd->addArgument($outputImage->getOutputTmpPath());
         $output = $this->execute($faceDetectCmd);

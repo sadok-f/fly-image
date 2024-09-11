@@ -1,6 +1,6 @@
 ---
 # Debug
-debug: false
+debug: true
 
 # Home page title
 home_page_title: Flyimg

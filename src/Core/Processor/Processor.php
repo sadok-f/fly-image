@@ -24,7 +24,7 @@ class Processor
     public const CWEBP_COMMAND = '/usr/bin/cwebp';
 
     /** FaceDetect bin path */
-    public const FACEDETECT_COMMAND = '/usr/local/bin/facedetect';
+    public const FACEDETECT_COMMAND = '/usr/bin/python3 /var/www/html/python/facedetect.py';
 
     /** Smart Crop script */
     public const SMARTCROP_COMMAND = '/usr/bin/python3 /var/www/html/python/smartcrop.py';
