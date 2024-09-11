@@ -1,5 +1,15 @@
 # Flyimg Changelog
 
+## [1.4.9](https://github.com/flyimg/flyimg/compare/1.4.8...1.4.9) (2024-09-11)
+
+
+### Bug Fixes
+
+* add requirements.txt for the python scripts ([be130ac](https://github.com/flyimg/flyimg/commit/be130acb497843e2680b3e031763f4a527c1cc49))
+* fix linting errors ([bab7f7b](https://github.com/flyimg/flyimg/commit/bab7f7bc0686dfc4aaee677d1cb6e66f3212eec0))
+* fix smart crop feature, use new base image version ([dcc4034](https://github.com/flyimg/flyimg/commit/dcc4034936b2ea8188081874f486ffd27e06421d))
+* fixing python linting error ([553cc62](https://github.com/flyimg/flyimg/commit/553cc6220c7c438c8776a8be4197d73ee5b62eb7))
+
 ## [1.4.8](https://github.com/flyimg/flyimg/compare/1.4.7...1.4.8) (2024-09-09)
 
 
