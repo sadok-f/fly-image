@@ -5,12 +5,11 @@
 from __future__ import division, generators, print_function, unicode_literals
 
 import argparse
-import numpy as np
-import cv2
 import math
-import sys
 import os
-
+import sys
+import cv2
+import numpy as np
 from PIL import Image
 
 try:
